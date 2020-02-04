@@ -1,5 +1,5 @@
-#Session 2, Ex 1
-#Print the first eleven numbers of the Fibonacci series
+#Session 2, Ex 2
+#Print the 5th, 10th and 15th terms of the Fibonacci series
 
 
 def FiboN(n):
