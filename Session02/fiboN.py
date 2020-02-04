@@ -1,5 +1,5 @@
 #Session 2, Ex 2
-#Print the 5th, 10th and 15th terms of the Fibonacci series
+#Calculate the 5th, 10th and 15th terms of the Fibonacci series
 
 
 def FiboN(n):

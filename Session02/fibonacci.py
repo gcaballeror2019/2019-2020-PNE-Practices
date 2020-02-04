@@ -1,5 +1,5 @@
 #Session 2, Ex 1
-#Print the first eleven numbers of the Fibonacci series
+#Calculate the first eleven numbers of the Fibonacci series
 
 #We define two variables to manage the values in the series
 value_0 = 0
