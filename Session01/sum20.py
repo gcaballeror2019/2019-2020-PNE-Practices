@@ -7,4 +7,4 @@ result = 0
 for i in range (0,20):
     result += i+1
 
-print(result)
+print("The sum is:", result)
