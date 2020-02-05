@@ -1,7 +1,9 @@
-#Session 2, Ex 1
-#Calculate the first eleven numbers of the Fibonacci serie
+# -- Session 2, Ex 1
+# -- Calculate the first eleven numbers of the Fibonacci serie
 
-#We define two variables to manage the values in the  Fib. serie
+# -- We define two variables to manage the values in the  Fib. serie
+
+
 value_0 = 0
 value_1 = 1
 

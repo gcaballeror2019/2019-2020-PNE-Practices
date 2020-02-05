@@ -4,7 +4,7 @@
 
 def sum_n(n):
     res_n = 0
-    for i in range(0,n):
+    for i in range(0, n):
         res_n += i + 1
     return res_n
 
