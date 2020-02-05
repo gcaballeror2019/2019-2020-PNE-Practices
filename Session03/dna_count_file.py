@@ -20,13 +20,11 @@ def dna_count(dna):
     return [a, c, t, g]
 
 
-seq = input('Please enter a valid DNA sequence (A, C, T ,G)')
-
-
-with open(dna.txt, 'r') as f:
+with open('dna.txt', 'r') as f:
+    tab = ''
     for line in f:
-        Tab = line.replace("\n", "").replace('"', "").split(",")[0]
-    print('The lenght of the DNA sequence is', len(Tab))
-    print('A:', dna_count(Tab)[0], '\n C:', dna_count(Tab)[1], '\n T:', dna_count(Tab)[2], '\n G:', dna_count(Tab)[3])
+        tab += line.replace("\n", "").replace('"', "").split(",")[0]
+    print('The lenght of the DNA sequence is', len(tab))
+    print('A:', dna_count(tab)[0], '\n C:', dna_count(tab)[1], '\n T:', dna_count(tab)[2], '\n G:', dna_count(tab)[3])
 
     f.close()
