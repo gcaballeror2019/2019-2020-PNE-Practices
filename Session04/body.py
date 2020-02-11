@@ -7,7 +7,7 @@ FILENAME = "RNU6_269P.txt"
 file_contents = Path(FILENAME).read_text()
 
 # -- Split the dile into two parts, the sequence and the header
-file_header = file_contents.split('\n', 1)
+file_body = file_contents.split('\n', 1)
 
 # -- Print the contents on the console (Only the body)
-print(file_header[1])
+print(file_body[1])
