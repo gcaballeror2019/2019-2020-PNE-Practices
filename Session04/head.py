@@ -9,5 +9,5 @@ file_contents = Path(FILENAME).read_text()
 # -- Split the dile into two parts, the sequence and the header
 file_header = file_contents.split('\n', 1)
 
-# -- Print the contents on the console
+# -- Print the contents on the console (Only the header)
 print(file_header[0])
