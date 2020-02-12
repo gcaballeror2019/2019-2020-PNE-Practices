@@ -30,3 +30,19 @@ def seq_count_base(seq, base):
         if file_body[i] == base:
             count = count + 1
     return count
+
+
+def seq_count(seq):
+    seq += '.txt'
+    bases = ['A', 'C', 'T', 'G']
+    tot = []
+    file_contents = Path(seq).read_text()
+    file_body = file_contents.split('\n', 1)
+    file_body = file_body[1].replace('\n', '')
+    for i in range(len(bases)):
+        count = 0
+        for j in range(len(file_body)):
+            if file_body[j] == bases[i]:
+                count += 1
+        tot.append(count)
+    return dict(zip(bases,tot))
