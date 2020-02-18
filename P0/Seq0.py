@@ -6,7 +6,7 @@ def seq_ping():
 
 
 def seq_read_fasta(filename):
-    filename +='.txt'
+    filename += '.txt'
     file_contents = Path(filename).read_text()
     file_body = file_contents.split('\n', 1)
     file_body = file_body[1].replace('\n', '')
@@ -46,15 +46,35 @@ def seq_count(seq):
             if file_body[j] == bases[i]:
                 count += 1
         tot.append(count)
-    return dict(zip(bases,tot))
+    return dict(zip(bases, tot))
+
 
 def seq_reverse(seq):
     seq += '.txt'
-    bases = ['A', 'C', 'T', 'G']
     file_contents = Path(seq).read_text()
     file_body = file_contents.split('\n', 1)
     file_body = file_body[1].replace('\n', '')
-    reversed = ''
+    reversed_str = ''
     for i in range(20):
-        reversed += file_body[19-i]
-    return reversed
+        reversed_str += file_body[19-i]
+    return reversed_str
+
+
+def seq_complement(seq):
+    seq += '.txt'
+    op_bases1 = ['A', 'T']
+    op_bases2 = ['C', 'G']
+    file_contents = Path(seq).read_text()
+    file_body = file_contents.split('\n', 1)
+    file_body = file_body[1].replace('\n', '')
+    complement_str = ''
+    for i in range(20):
+        if file_body[i] == op_bases1[0]:
+            complement_str += file_body[i].replace(file_body[i], op_bases1[1])
+        elif file_body[i] == op_bases1[1]:
+            complement_str += file_body[i].replace(file_body[i], op_bases1[0])
+        elif file_body[i] == op_bases2[0]:
+            complement_str += file_body[i].replace(file_body[i], op_bases2[1])
+        else:
+            complement_str += file_body[i].replace(file_body[i], op_bases2[0])
+    return complement_str
