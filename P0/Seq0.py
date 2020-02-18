@@ -78,3 +78,23 @@ def seq_complement(seq):
         else:
             complement_str += file_body[i].replace(file_body[i], op_bases2[0])
     return complement_str
+
+
+def frequent_genes(seq):
+    seq += '.txt'
+    bases = ['A', 'C', 'T', 'G']
+    file_contents = Path(seq).read_text()
+    file_body = file_contents.split('\n', 1)
+    file_body = file_body[1].replace('\n', '')
+    max_n = 0
+    gene = ''
+    for i in range(len(bases)):
+        count = 0
+        for j in range(len(file_body)):
+            if file_body[j] == bases[i]:
+                count += 1
+
+        if count > max_n:
+            gene = bases[i]
+            max_n = count
+    return gene
