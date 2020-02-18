@@ -6,6 +6,7 @@ def seq_ping():
 
 
 def seq_read_fasta(filename):
+    filename +='.txt'
     file_contents = Path(filename).read_text()
     file_body = file_contents.split('\n', 1)
     file_body = file_body[1].replace('\n', '')
@@ -46,3 +47,14 @@ def seq_count(seq):
                 count += 1
         tot.append(count)
     return dict(zip(bases,tot))
+
+def seq_reverse(seq):
+    seq += '.txt'
+    bases = ['A', 'C', 'T', 'G']
+    file_contents = Path(seq).read_text()
+    file_body = file_contents.split('\n', 1)
+    file_body = file_body[1].replace('\n', '')
+    reversed = ''
+    for i in range(20):
+        reversed += file_body[19-i]
+    return reversed
