@@ -1,0 +1,15 @@
+212.128.253.169
+
+gregocr@a-a1106-pc41:~$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=55 time=4.02 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=55 time=4.13 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=55 time=4.13 ms
+64 bytes from 8.8.8.8: icmp_seq=4 ttl=55 time=4.14 ms
+
+gregocr@a-a1106-pc41:~$ ping www.urjc.es
+PING www.urjc.es (212.128.240.50) 56(84) bytes of data.
+64 bytes from www.urjc.es (212.128.240.50): icmp_seq=1 ttl=253 time=2.22 ms
+64 bytes from www.urjc.es (212.128.240.50): icmp_seq=2 ttl=253 time=2.52 ms
+64 bytes from www.urjc.es (212.128.240.50): icmp_seq=3 ttl=253 time=2.29 ms
+64 bytes from www.urjc.es (212.128.240.50): icmp_seq=4 ttl=253 time=2.36 ms

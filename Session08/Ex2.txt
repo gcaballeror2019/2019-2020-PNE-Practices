@@ -1,0 +1,11 @@
+Destination IP	        Name (if known)	            Time
+
+192.168.124.179	             Self	        0.020 ms, 0.017 ms...
+212.128.255.129	         f-l3208-pc01       There is no response
+8.8.8.8	                    Google          3.94, 3.98, 3.91, 3.29 ms
+10.3.35.90                  Mobile          227 , 206 , 2.34 , 999 , 4.49 , 1.81 ms
+
+212.128.240.50            www.urjc.es       2.21, 2.26, 2.18, 2.28 ms
+140.82.118.3              github.com        36.2, 36.1, 36.1 ms
+208.80.154.224           wikipedia.org      35, 36, 34, 33 ms
+103.223.184.84          newdomain.com.au    308 ms (10000 ms tot. time)
