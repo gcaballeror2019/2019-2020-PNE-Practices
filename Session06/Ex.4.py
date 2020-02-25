@@ -1,3 +1,6 @@
+import termcolor
+
+
 class Seq:
     """A class for representing sequences"""
     def __init__(self, strbases):
@@ -41,11 +44,27 @@ class Gene(Seq):
         return self.name + "-" + self.strbases
 
 
-# --- Main program: We introduce two sequences to be analysed;
-# --- the program determines whenever they are valid or not
-# --- If they are valid, the program prints them.
+def print_seqs(seq_list, colour):
+    num_seq = 0
+    for i in seq_list:
+        ''' We improve the function by adding the 
+        termcolor function to add colour to the sequences printed'''
+        termcolor.cprint(f'Sequence {num_seq}:(Length: {i.len()}) {i}', colour)
+        num_seq += 1
 
-s1 = Seq("ACCTGC")
-s2 = Seq("Hello? Am I a valid sequence?")
-print(f"Sequence 1: {s1}")
-print(f"Sequence 2: {s2}")
+
+def generate_seqs(pattern, number):
+    new_seq = []
+    for i in range(number):
+        new_seq.append(Seq(pattern*(i+1)))
+    return new_seq
+
+
+seq_list1 = generate_seqs("A", 3,)
+seq_list2 = generate_seqs("AC", 5)
+
+# --- We add the desired colour as an argument for the function
+termcolor.cprint("List 1:", 'blue')
+print_seqs(seq_list1, 'blue')
+termcolor.cprint("List 2:", 'green')
+print_seqs(seq_list2, 'green')

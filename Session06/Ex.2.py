@@ -41,11 +41,18 @@ class Gene(Seq):
         return self.name + "-" + self.strbases
 
 
-# --- Main program: We introduce two sequences to be analysed;
-# --- the program determines whenever they are valid or not
-# --- If they are valid, the program prints them.
+def print_seqs(seq_list):
+    # --- This program allows us to print complete
+    # --- sequence lists, showing their lenght
 
-s1 = Seq("ACCTGC")
-s2 = Seq("Hello? Am I a valid sequence?")
-print(f"Sequence 1: {s1}")
-print(f"Sequence 2: {s2}")
+    num_seq = 0
+    for i in seq_list:
+        print(f'Sequence {num_seq}:(Length: {i.len()}) {i}')
+        num_seq += 1
+
+
+# --- We define a list to check the print_seqs function
+seq_list1 = [Seq("ACT"), Seq("GATA"), Seq("CAGATA")]
+
+
+print_seqs(seq_list1)

@@ -41,11 +41,28 @@ class Gene(Seq):
         return self.name + "-" + self.strbases
 
 
-# --- Main program: We introduce two sequences to be analysed;
-# --- the program determines whenever they are valid or not
-# --- If they are valid, the program prints them.
+def print_seqs(seq_list):
+    num_seq = 0
+    for i in seq_list:
+        print(f'Sequence {num_seq}:(Length: {i.len()}) {i}')
+        num_seq += 1
 
-s1 = Seq("ACCTGC")
-s2 = Seq("Hello? Am I a valid sequence?")
-print(f"Sequence 1: {s1}")
-print(f"Sequence 2: {s2}")
+
+def generate_seqs(pattern, number):
+    # --- We create a new sequence which is formed by n multiples of a pattern of codons given
+    new_seq = []
+    for i in range(number):
+        new_seq.append(Seq(pattern*(i+1)))
+    return new_seq
+
+
+# --- We generate two different sequences of variable lenght (in this case 1 & 2) to check the function
+seq_list1 = generate_seqs("A", 3)
+seq_list2 = generate_seqs("AC", 5)
+
+print("List 1:")
+print_seqs(seq_list1)
+
+print()
+print("List 2:")
+print_seqs(seq_list2)
