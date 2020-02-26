@@ -33,6 +33,20 @@ class Seq:
             return len(self.strbases)
 
 
+    def count_base(base):
+        bases = ['A', 'C', 'T', 'G']
+        if base.strbases == 'ERROR' or base.strbases == 'NULL':
+            for i in bases:
+                print(i,':', 0, end='  ')
+        else:
+            for i in bases:
+                count = 0
+                for j in base.strbases:
+                    if j is i:
+                        count += 1
+                print(i, ':', count, end='  ')
+
+
 class Gene(Seq):
     """This class is derived from the Seq Class
        All the objects of class Gene will inheritate
