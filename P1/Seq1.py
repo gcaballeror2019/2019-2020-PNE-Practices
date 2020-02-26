@@ -46,6 +46,16 @@ class Seq:
                         count += 1
                 print(i, ':', count, end='  ')
 
+    def count():
+        bases = ['A', 'C', 'T', 'G']
+        tot = []
+        for i in range(len(bases)):
+            count = 0
+            for j in range(len(strbases)):
+                if strbases[j] == bases[i]:
+                    count += 1
+            tot.append(count)
+        return dict(zip(bases, tot))
 
 class Gene(Seq):
     """This class is derived from the Seq Class
