@@ -3,18 +3,22 @@ import termcolor
 
 class Seq:
     """A class for representing sequences"""
-    def __init__(self, strbases):
-        codon = ['A', 'T', 'G', 'C']
-        valid = True
-        for i in strbases:
-            if i not in codon:
-                valid = False
-        if valid:
-            print("New sequence created!")
-            self.strbases = strbases
+    def __init__(self, strbases='NULL'):
+        if strbases == 'NULL':
+            self.strbases = 'NULL'
+            print('NULL Seq created')
         else:
-            print("INCORRECT Sequence detected")
-            self.strbases = 'ERROR'
+            codon = ['A', 'T', 'G', 'C']
+            valid = True
+            for i in strbases:
+                if i not in codon:
+                    valid = False
+            if valid:
+                print("New sequence created!")
+                self.strbases = strbases
+            else:
+                print("INCORRECT Sequence detected")
+                self.strbases = 'ERROR'
 
     def __str__(self):
         """Method called when the object is being printed"""
