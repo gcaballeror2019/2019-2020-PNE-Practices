@@ -27,7 +27,10 @@ class Seq:
 
     def len(self):
         """Calculate the length of the sequence"""
-        return len(self.strbases)
+        if self.strbases == 'ERROR' or self.strbases == 'NULL':
+            return '0'
+        else:
+            return len(self.strbases)
 
 
 class Gene(Seq):
