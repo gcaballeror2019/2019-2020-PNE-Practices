@@ -57,6 +57,17 @@ class Seq:
             tot.append(count)
         return dict(zip(bases, tot))
 
+    def reverse():
+        bases = ['A', 'C', 'T', 'G']
+        if base.strbases == 'ERROR' or base.strbases == 'NULL':
+            for i in bases:
+                print(i, ':', 0, end='  ')
+        else:
+            for i in range(strbases):
+                reversed_str += strbases[range(strbases) - i]
+            return reversed_str
+
+
 class Gene(Seq):
     """This class is derived from the Seq Class
        All the objects of class Gene will inheritate
