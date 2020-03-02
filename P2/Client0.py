@@ -1,3 +1,7 @@
+# --- Easy class to message sending
+import socket
+
+
 class Client:
     """A class for representing Clients"""
 
@@ -12,7 +16,7 @@ class Client:
     def ping():
         print('OK!')
 
-    def talk(self):
+    def talk(self, msg):
         # -- Create the socket
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
