@@ -106,35 +106,8 @@ class Seq:
         dna_string = dna_string[1].replace('\n', '')
         return dna_string
 
-class Gene(Seq):
-    """This class is derived from the Seq Class
-       All the objects of class Gene will inheritate
-       the methods from the Seq class
-    """
-    def __init__(self, strbases, name=""):
-
-        # -- Call first the Seq initilizer and then the
-        # -- Gene init method
-        super().__init__(strbases)
-        self.name = name
-        print("New gene created")
-
-    def __str__(self):
-        """Print the Gene name along with the sequence"""
-        return self.name + "-" + self.strbases
-
-
-def print_seqs(seq_list, colour):
-    num_seq = 0
-    for i in seq_list:
-        ''' We improve the function by adding the 
-        termcolor function to add colour to the sequences printed'''
-        termcolor.cprint(f'Sequence {num_seq}:(Length: {i.len()}) {i}', colour)
-        num_seq += 1
-
-
-def generate_seqs(pattern, number):
-    new_seq = []
-    for i in range(number):
-        new_seq.append(Seq(pattern*(i+1)))
-    return new_seq
+    def gene_abundance(self):
+        bases = ['A', 'C', 'T', 'G']
+        gene_dict = self.count()
+        max_gene = max(gene_dict, key=gene_dict.get)
+        return max_gene
