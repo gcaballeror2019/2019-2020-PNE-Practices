@@ -77,15 +77,11 @@ class Seq:
             database = dict(zip(bases, tot))
             return database
 
-    def reverse():
-        bases = ['A', 'C', 'T', 'G']
-        if base.strbases == 'ERROR' or base.strbases == 'NULL':
-            for i in bases:
-                print(i, ':', 0, end='  ')
+    def reverse(self):
+        if self.strbases == 'ERROR' or self.strbases == 'NULL':
+            return self.strbases
         else:
-            for i in range(strbases):
-                reversed_str += strbases[range(strbases) - i]
-            return reversed_str
+            return self.strbases[::-1]
 
 
 class Gene(Seq):
