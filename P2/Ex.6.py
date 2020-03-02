@@ -38,5 +38,5 @@ response_list = [response1, response2]
 print(f'{c.debug_talk(dna_string)}')
 for i in div_seq(filename)[1]:
     print(f'To server:  {i} \n From server:  {c.debug_talk(i)}')
-    if div_seq(filename)[1].index(i)>3:
+    if div_seq(filename)[1].index(i) > 3:
         break
