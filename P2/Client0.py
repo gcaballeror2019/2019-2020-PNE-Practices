@@ -9,7 +9,7 @@ class Client:
         return f'Connection to SERVER at {self.ip}, PORT:{self.port}'
 
     @staticmethod
-    def ping(self):
+    def ping():
         print('OK!')
 
     def talk(self):
