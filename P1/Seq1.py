@@ -1,5 +1,15 @@
-import termcolor
 from pathlib import Path
+
+
+def read_fasta(filename):
+    # --- The program reads a .txt file containing a dna string in which it erase the header and line
+    # --- jumps in the text for a clean read
+    filename += '.txt'
+    file_contents = Path(filename).read_text()
+    dna_string = file_contents.split('\n', 1)
+    dna_string = dna_string[1].replace('\n', '')
+    return dna_string
+
 
 class Seq:
     """A class for representing sequences"""
@@ -33,20 +43,24 @@ class Seq:
             return len(self.strbases)
 
 
-    def count_base(base):
+    def count_base(self):
+        # --- We divide blank and non-valid inputs from valid ones, then prints the amount of
+        # --- bases of each kind
         bases = ['A', 'C', 'T', 'G']
-        if base.strbases == 'ERROR' or base.strbases == 'NULL':
+        if self.strbases == 'ERROR' or self.strbases == 'NULL':
             for i in bases:
-                print(i,':', 0, end='  ')
+                print(i, ':', 0, end='  ')
         else:
             for i in bases:
                 count = 0
-                for j in base.strbases:
+                for j in self.strbases:
                     if j is i:
                         count += 1
                 print(i, ':', count, end='  ')
 
     def count(self):
+        # --- The program returns a dictionary with the amount of each base
+        # --- in the dna string (We separate valid from non-valid inputs)
         bases = ['A', 'C', 'T', 'G']
         tot = []
         NumA = 0
@@ -78,12 +92,14 @@ class Seq:
             return database
 
     def reverse(self):
+        # --- The program reverses valid dna strings
         if self.strbases == 'ERROR' or self.strbases == 'NULL':
             return self.strbases
         else:
             return self.strbases[::-1]
 
     def complement(self):
+        # --- The program finds the reverse sequence of the valid dna strings
         if self.strbases == 'ERROR' or self.strbases == 'NULL':
             return self.strbases
         else:
@@ -99,15 +115,8 @@ class Seq:
                     complements += 'C'
             return complements
 
-    def read_fasta(self, filename):
-        filename += '.txt'
-        file_contents = Path(filename).read_text()
-        dna_string = file_contents.split('\n', 1)
-        dna_string = dna_string[1].replace('\n', '')
-        return dna_string
-
     def gene_abundance(self):
-        bases = ['A', 'C', 'T', 'G']
+        # --- Finds the most abundant base in the dna string
         gene_dict = self.count()
         max_gene = max(gene_dict, key=gene_dict.get)
         return max_gene

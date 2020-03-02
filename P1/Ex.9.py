@@ -5,7 +5,7 @@ FILE = r'\U5'
 FILENAME = FOLDER + FILE
 
 s0 = Seq()
-seq_file = Seq(s0.read_fasta(FILENAME))
+seq_file = Seq(read_fasta(FILENAME))
 print(f'Sequence: (Length:  {seq_file.len()}) {seq_file}')
 print(f'Bases: {seq_file.count()}')
 print(f' Rev: {seq_file.reverse()}')

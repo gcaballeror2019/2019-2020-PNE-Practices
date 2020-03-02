@@ -6,5 +6,5 @@ docs = ['/U5', '/ADA', '/FRAT1', '/FXN', '/RNU6_269P']
 for i in docs:
     filename = folder + i
     s = Seq()
-    seq_doc = Seq(s.read_fasta(filename))
+    seq_doc = Seq(read_fasta(filename))
     print(f'Gene {i}: Most frequent base: {seq_doc.gene_abundance()}')
