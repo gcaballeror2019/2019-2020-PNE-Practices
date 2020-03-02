@@ -46,16 +46,36 @@ class Seq:
                         count += 1
                 print(i, ':', count, end='  ')
 
-    def count():
+    def count(self):
         bases = ['A', 'C', 'T', 'G']
         tot = []
-        for i in range(len(bases)):
-            count = 0
-            for j in range(len(strbases)):
-                if strbases[j] == bases[i]:
-                    count += 1
-            tot.append(count)
-        return dict(zip(bases, tot))
+        NumA = 0
+        NumC = 0
+        NumT = 0
+        NumG = 0
+        if self.strbases == 'NULL' or self.strbases == 'ERROR':
+            tot.append(NumA)
+            tot.append(NumC)
+            tot.append(NumT)
+            tot.append(NumG)
+            database = dict(zip(bases, tot))
+            return database
+        else:
+            for i in self.strbases:
+                if i == 'A':
+                    NumA += 1
+                elif i == 'C':
+                    NumC += 1
+                elif i == 'T':
+                    NumT += 1
+                elif i == 'G':
+                    NumG += 1
+            tot.append(NumA)
+            tot.append(NumC)
+            tot.append(NumT)
+            tot.append(NumG)
+            database = dict(zip(bases, tot))
+            return database
 
     def reverse():
         bases = ['A', 'C', 'T', 'G']
