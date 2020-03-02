@@ -83,6 +83,22 @@ class Seq:
         else:
             return self.strbases[::-1]
 
+    def complement(self):
+        if self.strbases == 'ERROR' or self.strbases == 'NULL':
+            return self.strbases
+        else:
+            complements = ''
+            for i in self.strbases:
+                if i == 'A':
+                    complements += 'T'
+                elif i == 'C':
+                    complements += 'G'
+                elif i == 'T':
+                    complements += 'A'
+                elif i == 'G':
+                    complements += 'C'
+            return complements
+
 
 class Gene(Seq):
     """This class is derived from the Seq Class
