@@ -1,5 +1,5 @@
 import termcolor
-
+from pathlib import Path
 
 class Seq:
     """A class for representing sequences"""
@@ -99,6 +99,12 @@ class Seq:
                     complements += 'C'
             return complements
 
+    def read_fasta(self, filename):
+        filename += '.txt'
+        file_contents = Path(filename).read_text()
+        dna_string = file_contents.split('\n', 1)
+        dna_string = dna_string[1].replace('\n', '')
+        return dna_string
 
 class Gene(Seq):
     """This class is derived from the Seq Class
