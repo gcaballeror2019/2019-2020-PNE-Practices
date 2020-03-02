@@ -1,16 +1,6 @@
 from pathlib import Path
 
 
-def read_fasta(filename):
-    # --- The program reads a .txt file containing a dna string in which it erase the header and line
-    # --- jumps in the text for a clean read
-    filename += '.txt'
-    file_contents = Path(filename).read_text()
-    dna_string = file_contents.split('\n', 1)
-    dna_string = dna_string[1].replace('\n', '')
-    return dna_string
-
-
 class Seq:
     """A class for representing sequences"""
     def __init__(self, strbases='NULL'):
@@ -120,3 +110,12 @@ class Seq:
         gene_dict = self.count()
         max_gene = max(gene_dict, key=gene_dict.get)
         return max_gene
+
+    def read_fasta(self, filename):
+        # --- The program reads a .txt file containing a dna string in which it erase the header and line
+        # --- jumps in the text for a clean read
+        filename += '.txt'
+        file_contents = Path(filename).read_text()
+        dna_string = file_contents.split('\n', 1)
+        dna_string = dna_string[1].replace('\n', '')
+        return dna_string
