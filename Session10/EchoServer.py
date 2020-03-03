@@ -8,7 +8,7 @@ ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 # Configure the Server's IP and PORT
 PORT = 8081
-IP = "212.128.253.169 "
+IP = "212.128.253.169"
 
 # -- Step 1: create the socket
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,6 +23,7 @@ ls.bind((IP, PORT))
 ls.listen()
 
 print("The server is configured!")
+nc = 0
 
 while True:
     # -- Waits for a client to connect
@@ -44,7 +45,8 @@ while True:
     # -- Execute this part if there are no errors
     else:
 
-        print("A client has connected to the server!")
+        nc += 1
+        print("CONNECTION: {} From the IP: {}".format(nc, client_ip_port))
 
         # -- Read the message from the client
         # -- The received message is in raw bytes

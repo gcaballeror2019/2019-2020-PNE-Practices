@@ -32,7 +32,6 @@ class Seq:
         else:
             return len(self.strbases)
 
-
     def count_base(self):
         # --- We divide blank and non-valid inputs from valid ones, then prints the amount of
         # --- bases of each kind
@@ -53,31 +52,31 @@ class Seq:
         # --- in the dna string (We separate valid from non-valid inputs)
         bases = ['A', 'C', 'T', 'G']
         tot = []
-        NumA = 0
-        NumC = 0
-        NumT = 0
-        NumG = 0
+        num_a = 0
+        num_c = 0
+        num_t = 0
+        num_g = 0
         if self.strbases == 'NULL' or self.strbases == 'ERROR':
-            tot.append(NumA)
-            tot.append(NumC)
-            tot.append(NumT)
-            tot.append(NumG)
+            tot.append(num_a)
+            tot.append(num_c)
+            tot.append(num_t)
+            tot.append(num_g)
             database = dict(zip(bases, tot))
             return database
         else:
             for i in self.strbases:
                 if i == 'A':
-                    NumA += 1
+                    num_a += 1
                 elif i == 'C':
-                    NumC += 1
+                    num_c += 1
                 elif i == 'T':
-                    NumT += 1
+                    num_t += 1
                 elif i == 'G':
-                    NumG += 1
-            tot.append(NumA)
-            tot.append(NumC)
-            tot.append(NumT)
-            tot.append(NumG)
+                    num_g += 1
+            tot.append(num_a)
+            tot.append(num_c)
+            tot.append(num_t)
+            tot.append(num_g)
             database = dict(zip(bases, tot))
             return database
 
