@@ -40,7 +40,7 @@ class Client:
         s.connect((self.ip, self.port))
         msg = colored(msg, 'blue')
         s.send(str.encode(msg))
-        resp = s.recv(2048).decode('utf-8')
+        resp = s.recv(2048).decode()
         response = colored(resp, 'green')
         s.close()
         return response
