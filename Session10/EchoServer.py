@@ -24,46 +24,55 @@ ls.listen()
 
 print("The server is configured!")
 nc = 0
+client_ip_list = []
 
 while True:
-    # -- Waits for a client to connect
-    print("Waiting for Clients to connect")
+    if nc < 5:
+        # -- Waits for a client to connect
+        print("Waiting for Clients to connect")
 
-    try:
-        (cs, client_ip_port) = ls.accept()
+        try:
+            (cs, client_ip_port) = ls.accept()
 
-    # -- Server stopped manually
-    except KeyboardInterrupt:
-        print("Server stopped by the user")
+        # -- Server stopped manually
+        except KeyboardInterrupt:
+            print("Server stopped by the user")
 
-        # -- Close the listenning socket
-        ls.close()
+            # -- Close the listenning socket
+            ls.close()
 
-        # -- Exit!
-        exit()
+            # -- Exit!
+            exit()
 
-    # -- Execute this part if there are no errors
+        # -- Execute this part if there are no errors
+        else:
+
+            nc += 1
+            client_ip_list.append(f'Client{nc}:{client_ip_port}')
+            print("CONNECTION: {} From the IP: {}".format(nc, client_ip_port))
+
+            # -- Read the message from the client
+            # -- The received message is in raw bytes
+            msg_raw = cs.recv(2048)
+
+            # -- We decode it for converting it
+            # -- into a human-redeable string
+            msg = msg_raw.decode()
+
+            # -- Print the received message
+            print(f'Message received: {msg}')
+
+            # -- Send a response message to the client
+            response = f'Echo: {msg}\n'
+
+            # -- The message has to be encoded into bytes
+            cs.send(str.encode(response))
+
+            # -- Close the data socket
+            cs.close()
     else:
-
-        nc += 1
-        print("CONNECTION: {} From the IP: {}".format(nc, client_ip_port))
-
-        # -- Read the message from the client
-        # -- The received message is in raw bytes
-        msg_raw = cs.recv(2048)
-
-        # -- We decode it for converting it
-        # -- into a human-redeable string
-        msg = msg_raw.decode()
-
-        # -- Print the received message
-        print(f'Message received: {msg}')
-
-        # -- Send a response message to the client
-        response = f'Echo: {msg}\n'
-
-        # -- The message has to be encoded into bytes
-        cs.send(str.encode(response))
-
-        # -- Close the data socket
-        cs.close()
+        print(f'The following clients have sended a message to the server:')
+        for i in client_ip_list:
+            print(i)
+        ls.close()
+        exit()
