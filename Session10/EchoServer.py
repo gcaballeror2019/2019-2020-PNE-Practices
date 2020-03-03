@@ -55,7 +55,7 @@ while True:
         msg = msg_raw.decode()
 
         # -- Print the received message
-        print(f"Message received: {msg}")
+        print(f'Message received: {msg}')
 
         # -- Send a response message to the client
         response = f'Echo: {msg}\n'
