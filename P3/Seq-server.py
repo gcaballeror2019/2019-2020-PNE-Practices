@@ -39,6 +39,20 @@ def info_seq(in_msg):
     return cs.send(str.encode(response))
 
 
+def comp_seq(in_msg):
+    get = Seq(spl_in(in_msg))
+    response = get.complement()
+    print(response)
+    return cs.send(str.encode(response))
+
+
+def rev_seq(in_msg):
+    get = Seq(spl_in(in_msg))
+    response = get.reverse()
+    print(response)
+    return cs.send(str.encode(response))
+
+
 # -- Step 1: create the socket
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -110,7 +124,14 @@ while True:
                 print(colored('INFO command!', 'blue'))
                 info_seq(msg)
                 cs.close()
-
+            elif 'COMP' in msg:
+                print(colored('COMP command!', 'magenta'))
+                comp_seq(msg)
+                cs.close()
+            elif 'REV' in msg:
+                print(colored('REV command!', 'cyan'))
+                rev_seq(msg)
+                cs.close()
     else:
         print(f'The following clients have sended a message to the server:')
         for i in client_ip_list:
