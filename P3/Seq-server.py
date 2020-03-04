@@ -53,6 +53,14 @@ def rev_seq(in_msg):
     return cs.send(str.encode(response))
 
 
+def gene_file(in_msg):
+    get = spl_in(in_msg)
+    s0 = Seq()
+    response = s0.read_fasta('/home/alumnos/gregocr/PycharmProjects/2019-2020-PNE-Practices/Session04/' + get)
+    print(response)
+    return cs.send(str.encode(response))
+
+
 # -- Step 1: create the socket
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -79,6 +87,7 @@ print("SEQ server configured!")
 nc = 0
 client_ip_list = []
 dna_list = ['ACTG', 'ACTGA', 'ACTGAC', 'ACTGACT', 'ACTGACTG']
+doc_list = ['U5', 'ADA', 'FRAT1', 'FXN', 'RNU6_269P']
 while True:
     if nc < 5:
         # -- Waits for a client to connect
@@ -129,9 +138,19 @@ while True:
                 comp_seq(msg)
                 cs.close()
             elif 'REV' in msg:
-                print(colored('REV command!', 'cyan'))
-                rev_seq(msg)
-                cs.close()
+                doc = False
+                for i in doc_list:
+                    if i in msg:
+                        doc = True
+                if doc:
+                    print(colored('GENE command!', 'white'))
+                    gene_file(msg)
+                    cs.close()
+                else:
+                    rev_seq(msg)
+                    print(colored('REV command!', 'cyan'))
+                    cs.close()
+
     else:
         print(f'The following clients have sended a message to the server:')
         for i in client_ip_list:
