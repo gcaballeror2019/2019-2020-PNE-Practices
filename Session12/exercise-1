@@ -1,0 +1,13 @@
+http://127.0.0.1:8080/hello
+    Request line: GET /favicon.ico HTTP/1.1
+    Resource: favicon.ico
+
+http://127.0.0.1:8080/file.html
+    Request lines: GET /file.html HTTP/1.1;    GET /favicon.ico HTTP/1.1
+    Resource: file.html;    favicon.ico
+
+ http://127.0.0.1:8080/hi/there?name=virus&type=corona
+    Request lines:  GET /hi/there?name=virus&type=corona HTTP/1.1;  GET /favicon.ico HTTP/1.1
+
+
+http://127.0.0.1:8080/dna/u5.html
