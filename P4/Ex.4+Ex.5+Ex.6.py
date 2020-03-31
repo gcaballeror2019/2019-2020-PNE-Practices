@@ -6,11 +6,22 @@ from pathlib import Path
 IP = "127.0.0.1"
 PORT = 8080
 
-
+# -- We define a function which returns a reading of a html doc. depending on the
+# -- solicited page
 def page_sorter(page):
     ret = ''
     if page == '/info/A':
         ret = Path('A.html').read_text()
+    elif page == '/info/C':
+        ret = Path('C.html').read_text()
+    elif page == '/info/T':
+        ret = Path('T.html').read_text()
+    elif page == '/info/G':
+        ret = Path('G.html').read_text()
+    elif page == '/':
+        ret = Path('index.html').read_text()
+    else:
+        ret = Path('error.html').read_text()
     return ret
 
 
@@ -23,7 +34,6 @@ def process_client(s):
 
     # -- Split the request messages into lines
     lines = req.split('\n')
-
     # -- The request line is the first
     req_line = lines[0]
 
@@ -38,11 +48,10 @@ def process_client(s):
     print(f'Command: {command}')
     termcolor.cprint(path, 'green')
 
-
     response = ''
     if command == 'GET':
         response = page_sorter(path)
-
+        print(response)
     # -- Status line: We respond that everything is ok (200 code)
     status_line = "HTTP/1.1 200 OK\n"
 
