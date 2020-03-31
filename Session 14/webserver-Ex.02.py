@@ -1,6 +1,8 @@
 import http.server
 import socketserver
 import termcolor
+from pathlib import Path
+
 
 # Define the Server's port
 PORT = 8080
@@ -32,14 +34,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         # -- Content type header
         # -- Both, the error and the main page are in plain text in this examples
-        content_type = 'text/plain'
+        content_type = 'text/html'
 
         # -- Gives a response depending of the existence of de
         if path == "":
             termcolor.cprint("Main page req", 'green')
 
             # Message to send back to the client
-            contents = "Welcome to my server"
+            contents = Path('index.html').read_txt()
 
             # Status code is ok
             status = 200
@@ -48,7 +50,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             termcolor.cprint("ERROR: Not found", 'red')
 
             # Message to send back to the client
-            contents = "Resource not available"
+            contents = Path('Error.html').read_txt
 
             # Status code is NOT FOUND
             status = 404
