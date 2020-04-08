@@ -38,13 +38,20 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if verb == '/':
             # OPen form-1 file (HTML)
-            contents = Path('form-EX01.html').read_text()
+            contents = Path('form-EX02.html').read_text()
             # Status code
             status = 200
         elif verb == '/echo':
             # -- Get the sub-argument next to ?
             sub_a = arguments[1]
-            name, value = sub_a.split('=')
+            n_val = sub_a.split('&')
+            name, value = n_val[0].split('=')
+
+            if len(sub_a) > 1:
+                check, check_val = n_val[1].split('=')
+                if check == 'check':
+                    value = value.upper()
+
             contents = '''
                         <!DOCTYPE html>
                         <html lang='en'>
