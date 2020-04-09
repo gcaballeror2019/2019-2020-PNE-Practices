@@ -1,5 +1,6 @@
 {
     "First_name": "Troll",
     "Last_name": "Face",
-    "age": 20
+    "age": 20,
+    "phone_number": ["1111", "2222"]
 }

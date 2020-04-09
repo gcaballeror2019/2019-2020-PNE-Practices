@@ -15,6 +15,7 @@ person = json.loads(jsonstring)
 first_name = person['First_name']
 last_name = person['Last_name']
 age = person['age']
+phone_number = person['phone_number']
 
 # Print the information on the console, in colors
 print()
@@ -22,3 +23,8 @@ termcolor.cprint("Name: ", 'green', end="")
 print(first_name, last_name)
 termcolor.cprint("Age: ", 'green', end="")
 print(age)
+termcolor.cprint("Phone Num.: ", 'green', end="")
+print(len(phone_number))
+for i, num in enumerate(phone_number):
+    termcolor.cprint("  Phone {}:".format(i), 'blue', end='')
+    print(num)
