@@ -34,7 +34,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             error_code = 200
         elif resource == "/listusers":
             # Read the file
-            contents = Path('person-3.json').read_text()
+            contents = Path('people-Ex01.json').read_text()
             content_type = 'application/json'
             error_code = 200
         else:
