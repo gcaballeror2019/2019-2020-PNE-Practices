@@ -39,38 +39,38 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if path == "":
             termcolor.cprint("Main page req", 'green')
-
             # Message to send back to the client
             contents = Path('index.html').read_text()
-
             # Status code is ok
             status = 200
-        elif "/info" in path:
-            codon = path - '/info/'
-            if codon == 'A':
-                termcolor.cprint("A info page req", 'green')
-                # Message to send back to the client
-                contents = Path('A.html').read_text()
-                # Status code is ok
-                status = 200
-            elif codon == 'C':
-                termcolor.cprint("C info page req", 'green')
-                # Message to send back to the client
-                contents = Path('C.html').read_text()
-                # Status code is ok
-                status = 200
-            elif codon == 'T':
-                termcolor.cprint("T info page req", 'green')
-                # Message to send back to the client
-                contents = Path('T.html').read_text()
-                # Status code is ok
-                status = 200
-            elif codon == 'G':
-                termcolor.cprint("G info page req", 'green')
-                # Message to send back to the client
-                contents = Path('G.html').read_text()
-                # Status code is ok
-                status = 200
+
+        elif path == "info/A":
+            termcolor.cprint("A info page req", 'green')
+            # Message to send back to the client
+            contents = Path('A.html').read_text()
+            # Status code is ok
+            status = 200
+
+        elif path == "info/C":
+            termcolor.cprint("C info page req", 'green')
+            # Message to send back to the client
+            contents = Path('C.html').read_text()
+            # Status code is ok
+            status = 200
+
+        elif path == "info/T":
+            termcolor.cprint("T info page req", 'green')
+            # Message to send back to the client
+            contents = Path('T.html').read_text()
+            # Status code is ok
+            status = 200
+
+        elif path == "info/G":
+            termcolor.cprint("G info page req", 'green')
+            # Message to send back to the client
+            contents = Path('G.html').read_text()
+            # Status code is ok
+            status = 200
         else:
             # -- not found
             termcolor.cprint("ERROR: Not found", 'red')
