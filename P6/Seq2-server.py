@@ -2,6 +2,7 @@ from pathlib import Path
 import http.server
 import termcolor
 import socketserver
+from Seq1 import Seq
 
 # Define the Server's port
 PORT = 8080
@@ -16,6 +17,9 @@ seq_num = [
     'ACTGGATCTTACCCATCGTAGCTAGTGCTAGCTG',
     'AAAAAGCTTTACTGTACGTAGCATGGCTGTCAGC'
 ]
+folder = '\Session04'
+ext = 'txt'
+
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
 # It means that our class inherits all his methods and properties
 class TestHandler(http.server.BaseHTTPRequestHandler):
@@ -44,7 +48,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if verb == '/':
             # OPen form-1 file (HTML)
-            contents = Path('form-2.html').read_text()
+            contents = Path('form-3.html').read_text()
             # Status code
             status = 200
         elif verb == '/ping':
@@ -69,7 +73,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             tpe = pair.split('&')
             ind, value = tpe[0].split('=')
             n = int(value)
-
             # -- Get sequence
             seq = seq_num[n]
 
@@ -89,6 +92,36 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </html>
                         """
             status = 200
+
+        elif verb == '/gene':
+            # -- Get the argument to the right of the ? symbol
+            pair = arguments[1]
+            # -- Get all the pairs name = value
+            pairs = pair.split('&')
+            # -- Get the two elements: name and value
+            name, gene = pairs[0].split('=')
+
+            s = Seq()
+            s.read_fasta(folder + gene + ext)
+            gene_str = str(s)
+            # -- Generate the html code
+            contents = f"""
+                                   <!DOCTYPE html>
+                                   <html lang = "en">
+                                   <head>
+                                   <meta charset = "utf-8" >
+                                     <title> GENE </title >
+                                   </head >
+                                   <body>
+                                   <h2> Gene: {gene}</h2>
+                                   <textarea readonly rows="20" cols="80"> {gene_str} </textarea>
+                                   <br>
+                                   <br>
+                                   <a href="/">Main page</a>
+                                   </body>
+                                   </html>
+                                   """
+            error_code = 200
         # -- Generating the response message
         self.send_response(status)
 
