@@ -9,7 +9,13 @@ PORT = 8080
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 
-
+seq_num = [
+    'ACTAAACTGATCGATGCTAGCTAGTCGATGCTAG',
+    'TCTTGCGTAGCTGTGATGCTTTTGGACGTGTAGC',
+    'ATCGACTCGATTTAAAACTGATCGATCGATCGAT',
+    'ACTGGATCTTACCCATCGTAGCTAGTGCTAGCTG',
+    'AAAAAGCTTTACTGTACGTAGCATGGCTGTCAGC'
+]
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
 # It means that our class inherits all his methods and properties
 class TestHandler(http.server.BaseHTTPRequestHandler):
@@ -38,7 +44,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if verb == '/':
             # OPen form-1 file (HTML)
-            contents = Path('form-1.html').read_text()
+            contents = Path('form-2.html').read_text()
             # Status code
             status = 200
         elif verb == '/ping':
@@ -58,7 +64,31 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </html>
                         '''
             status = 200
+        elif verb == '/get':
+            pair = arguments[1]
+            tpe = pair.split('&')
+            ind, value = tpe[0].split('=')
+            n = int(value)
 
+            # -- Get sequence
+            seq = seq_num[n]
+
+            # -- HTML
+            contents = f"""
+                        <!DOCTYPE html>
+                        <html lang = 'en'>
+                        <head>
+                        <meta charset = 'utf-8' >
+                          <title> GET </title >
+                        </head >
+                        <body>
+                        <h2> Sequence number {n}</h2>
+                        <p> {seq} </p>
+                        <a href='/'>Main page</a>
+                        </body>
+                        </html>
+                        """
+            status = 200
         # -- Generating the response message
         self.send_response(status)
 
