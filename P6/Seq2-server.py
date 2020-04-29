@@ -50,7 +50,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if verb == '/':
             # OPen form-1 file (HTML)
-            contents = Path('form-3.html').read_text()
+            contents = Path('form-4.html').read_text()
             # Status code
             status = 200
         elif verb == '/ping':
@@ -124,6 +124,53 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                    </html>
                                    """
             error_code = 200
+        elif verb == '/operation':
+            # -- Get the argument to the right of the ? symbol
+            pair = arguments[1]
+            # -- Get all the pairs name = value
+            pairs = pair.split('&')
+            # -- Get the two elements: name and value
+            name, gene = pairs[0].split('=')
+            o_name, operation = pairs[1].split('=')
+            s = Seq(gene)
+            if operation == 'rev':
+                res = s.reverse()
+            elif operation == 'comp':
+                res = s.complement()
+            else:
+                length = s.len()
+                counter = s.count_base('A')
+                print(counter)
+                per_a = 100 * counter['A'] / length
+                per_c = 100 * counter['C'] / length
+                per_t = 100 * counter['T'] / length
+                per_g = 100 * counter['G'] / length
+                res = f"""
+                    <p>Total length: {length}</p>
+                    <p>A: {counter['A']} ({per_a}%)</p>
+                    <p>C: {counter['C']} ({per_c}%)</p>
+                    <p>T: {counter['T']} ({per_t}%)</p>
+                    <p>G: {counter['G']} ({per_g}%)</p>"""
+                contents = f"""
+                                        <!DOCTYPE html>
+                                        <html lang = "en">
+                                        <head>
+                                        <meta charset = "utf-8" >
+                                          <title> Operations </title >
+                                        </head >
+                                        <body>
+                                        <h2> Seq:</h2>
+                                        <p>{s}</p>
+                                        <h2> Operation: </h2>
+                                        <p>{operation}</p>
+                                        <h2> Result: </h2>
+                                        <p>{res}</p>
+                                        <br>
+                                        <br>
+                                        <a href="/">Main page</a>
+                                        </body>
+                                        </html>
+                                        """
         # -- Generating the response message
         self.send_response(status)
 
