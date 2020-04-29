@@ -37,20 +37,18 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         content_type = 'text/html'
 
         # -- Gives a response depending of the existence of de
-        if path == "":
-            termcolor.cprint("Main page req", 'green')
-
-            # Message to send back to the client
-            contents = Path('index.html').read_txt()
-
-            # Status code is ok
+        if path == '':
+            path = 'index.html'
+        if path == 'index.html':
+            termcolor.cprint('M. Page requested', 'green')
+            contents = Path(path).read_text()
             status = 200
         else:
             # -- not found
             termcolor.cprint("ERROR: Not found", 'red')
 
             # Message to send back to the client
-            contents = Path('Error.html').read_txt
+            contents = Path('Error.html').read_text()
 
             # Status code is NOT FOUND
             status = 404
@@ -78,15 +76,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 Handler = TestHandler
 
 # -- Open the socket server
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
+with socketserver.TCPServer(('', PORT), Handler) as httpd:
 
-    print("Serving at PORT", PORT)
+    print('Serving at PORT', PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
     # -- clint, the handler is called
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("")
-        print("Stoped by the user")
+        print('')
+        print('Stopped by the user')
         httpd.server_close()
