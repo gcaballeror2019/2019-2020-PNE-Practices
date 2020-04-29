@@ -39,20 +39,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- Gives a response depending of the existence of de
         if path == '':
             path = 'index.html'
-        if path == 'index.html':
-            termcolor.cprint('M. Page requested', 'green')
+
+        try:
             contents = Path(path).read_text()
             status = 200
-        else:
+        except FileNotFoundError:
             # -- not found
-            termcolor.cprint("ERROR: Not found", 'red')
-
-            # Message to send back to the client
             contents = Path('Error.html').read_text()
-
             # Status code is NOT FOUND
             status = 404
-
         # Generating the response message
         self.send_response(status)
 
