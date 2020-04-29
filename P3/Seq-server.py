@@ -9,14 +9,17 @@ def ping():
     return cs.send(str.encode(response))
 
 
+# -- Function designed to divide the incoming commands
 def spl_in(in_msg):
     return in_msg.split(' ')[1]
 
 
+# -- Function designed to create the percentage of a value
 def percentage(partial, tot):
-    return round((partial*100)/tot, 1)
+    return round((partial * 100) / tot, 1)
 
 
+# -- Function designed to access the asked sequence 'n'
 def get_seq(in_msg):
     index = int(spl_in(in_msg))
     response = dna_list[index]
@@ -24,6 +27,7 @@ def get_seq(in_msg):
     return cs.send(str.encode(response))
 
 
+# -- Function designed to access the information about the given sequence
 def info_seq(in_msg):
     get = Seq(spl_in(in_msg))
     f_msg = f'Sequence:{get}\n'
@@ -31,14 +35,15 @@ def info_seq(in_msg):
     f_msg += f'Total length: {len_seq}\n'
     count_seq = get.count()
     for k, v in count_seq.items():
-        perc = percentage(v, len_seq)
-        codon = f'{k}: {v} ({perc}%)\n'
-        f_msg += codon
+        per = percentage(v, len_seq)
+        cod = f'{k}: {v} ({per}%)\n'
+        f_msg += cod
     response = f_msg
     print(response)
     return cs.send(str.encode(response))
 
 
+# -- Function designed to calculate the complement of the given sequence
 def comp_seq(in_msg):
     get = Seq(spl_in(in_msg))
     response = get.complement()
@@ -46,6 +51,7 @@ def comp_seq(in_msg):
     return cs.send(str.encode(response))
 
 
+# -- Function designed to calculate the reverse of the given sequence
 def rev_seq(in_msg):
     get = Seq(spl_in(in_msg))
     response = get.reverse()
@@ -53,6 +59,7 @@ def rev_seq(in_msg):
     return cs.send(str.encode(response))
 
 
+# -- Function designed to access the complete sequence of the given gene
 def gene_file(in_msg):
     get = spl_in(in_msg)
     s0 = Seq()
@@ -118,9 +125,11 @@ while True:
             msg_raw = cs.recv(2048)
 
             # -- We decode it for converting it
-            # -- into a human-redeable string
+            # -- into a human-readable string
             msg = msg_raw.decode()
 
+            # -- We sort the different services to perform the solicited
+            # -- actions
             if msg == 'PING':
                 print(colored('PING command!', 'yellow'))
                 ping()
@@ -152,7 +161,7 @@ while True:
                     cs.close()
 
     else:
-        print(f'The following clients have sended a message to the server:')
+        print(f'The following clients have sent a message to the server:')
         for i in client_ip_list:
             print(i)
         ls.close()
