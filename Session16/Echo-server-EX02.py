@@ -94,7 +94,7 @@ Handler = TestHandler
 with socketserver.TCPServer(('', PORT), Handler) as httpd:
     print("Serving at PORT", PORT)
 
-    # -- Main loop: Attend the client. Whenever there is a new
+    # -- Main loop: Attend the client; Whenever there is a new
     # -- clint, the handler is called
     try:
         httpd.serve_forever()
