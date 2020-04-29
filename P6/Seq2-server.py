@@ -17,8 +17,9 @@ seq_num = [
     'ACTGGATCTTACCCATCGTAGCTAGTGCTAGCTG',
     'AAAAAGCTTTACTGTACGTAGCATGGCTGTCAGC'
 ]
-folder = '\Session04'
-ext = 'txt'
+folder = r'C:\\Users\\Usuario\\PycharmProjects\\2019-2020-PNE-Practices2\\Session04\\'
+ext = '.txt'
+
 
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
 # It means that our class inherits all his methods and properties
@@ -43,8 +44,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # -- The verb is located as the first argument
         verb = arguments[0]
 
-        status = 404
         contents = Path('Error.html').read_text()
+        status = 404
+
         # -- Gives a response depending of the existence of de
         if verb == '/':
             # OPen form-1 file (HTML)
@@ -70,7 +72,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             status = 200
         elif verb == '/get':
             pair = arguments[1]
-            tpe = pair.split('&')
+            tpe = pair.split('?')
             ind, value = tpe[0].split('=')
             n = int(value)
             # -- Get sequence
@@ -79,15 +81,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # -- HTML
             contents = f"""
                         <!DOCTYPE html>
-                        <html lang = 'en'>
+                        <html lang = "en">
                         <head>
-                        <meta charset = 'utf-8' >
+                        <meta charset = "utf-8" >
                           <title> GET </title >
                         </head >
                         <body>
                         <h2> Sequence number {n}</h2>
                         <p> {seq} </p>
-                        <a href='/'>Main page</a>
+                        <a href="/">Main page</a>
                         </body>
                         </html>
                         """
@@ -102,7 +104,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             name, gene = pairs[0].split('=')
 
             s = Seq()
-            s.read_fasta(folder + gene + ext)
+            s = s.read_fasta(folder + gene)
             gene_str = str(s)
             # -- Generate the html code
             contents = f"""
