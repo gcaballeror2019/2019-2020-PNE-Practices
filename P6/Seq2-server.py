@@ -54,6 +54,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # Status code
             status = 200
         elif verb == '/ping':
+            # Verification page to show that the server is on-line
             contents = '''
                         <!DOCTYPE html>
                         <html lang='en'>
@@ -123,54 +124,55 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                    </body>
                                    </html>
                                    """
-            error_code = 200
+            status = 200
         elif verb == '/operation':
             # -- Get the argument to the right of the ? symbol
             pair = arguments[1]
             # -- Get all the pairs name = value
             pairs = pair.split('&')
-            # -- Get the two elements: name and value
-            name, gene = pairs[0].split('=')
+            # -- Get the two elements: name and value, and the operation name w/ the chosen operation
+            name, seq = pairs[0].split('=')
             o_name, operation = pairs[1].split('=')
-            s = Seq(gene)
-            if operation == 'rev':
-                res = s.reverse()
-            elif operation == 'comp':
-                res = s.complement()
+            seq = Seq(seq)
+            if operation == 'Rev':
+                result = seq.reverse()
+            elif operation == 'Comp':
+                result = seq.complement()
             else:
-                length = s.len()
-                counter = s.count_base('A')
-                print(counter)
-                per_a = 100 * counter['A'] / length
-                per_c = 100 * counter['C'] / length
-                per_t = 100 * counter['T'] / length
-                per_g = 100 * counter['G'] / length
-                res = f"""
-                    <p>Total length: {length}</p>
+                # We calculate the length, amount of bases and the percentage they occupy in the sequence
+                g_len = seq.len()
+                counter = seq.count()
+                per_a = 100 * int(counter['A']) / g_len
+                per_c = 100 * int(counter['C']) / g_len
+                per_t = 100 * int(counter['T']) / g_len
+                per_g = 100 * int(counter['G']) / g_len
+                result = f"""
+                    <p>Total length: {g_len}</p>
                     <p>A: {counter['A']} ({per_a}%)</p>
                     <p>C: {counter['C']} ({per_c}%)</p>
-                    <p>T: {counter['T']} ({per_t}%)</p>
-                    <p>G: {counter['G']} ({per_g}%)</p>"""
-                contents = f"""
-                                        <!DOCTYPE html>
-                                        <html lang = "en">
-                                        <head>
-                                        <meta charset = "utf-8" >
-                                          <title> Operations </title >
-                                        </head >
-                                        <body>
-                                        <h2> Seq:</h2>
-                                        <p>{s}</p>
-                                        <h2> Operation: </h2>
-                                        <p>{operation}</p>
-                                        <h2> Result: </h2>
-                                        <p>{res}</p>
-                                        <br>
-                                        <br>
-                                        <a href="/">Main page</a>
-                                        </body>
-                                        </html>
-                                        """
+                    <p>G: {counter['T']} ({per_t}%)</p>
+                    <p>T: {counter['G']} ({per_g}%)</p>"""
+            contents = f"""
+                <!DOCTYPE html>
+                <html lang = "en">
+                <head>
+                <meta charset = "utf-8" >
+                    <title> Operations </title >
+                </head >
+                <body>
+                <h2> Seq:</h2>
+                <p>{seq}</p>
+                <h2> Operation: </h2>
+                <p>{operation}</p>
+                <h2> Result: </h2>
+                <p>{result}</p>
+                <br>
+                <br>
+                <a href="/">Main page</a>
+                </body>
+                </html>
+                """
+            status = 200
         # -- Generating the response message
         self.send_response(status)
 
