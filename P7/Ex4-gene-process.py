@@ -1,7 +1,10 @@
+# -- Had some problems with the DNS and i couldn't check
+# the program
 import http.client
 import json
 import termcolor
 from Seq1 import Seq
+
 GENES = {
     'FRAT1': 'ENSG00000165879',
     'ADA': 'ENSG00000196839',
@@ -34,7 +37,7 @@ try:
     cnect.request('GET', REQ)
 
 except ConnectionRefusedError:
-    print('ERROR! Cannot connect to the Server')
+    print('Cannot connect to the Server')
     exit()
 
 # -- Read the response message from the server
@@ -61,28 +64,38 @@ s = Seq(g_str)
 
 str_len = s.len()
 
-Num = s.count_base()
-Per_A = '{:.1f}'.format(100 * int(Num[0]) / str_len)
-Per_C = '{:.1f}'.format(100 * int(Num[1]) / str_len)
-Per_T = '{:.1f}'.format(100 * int(Num[2]) / str_len)
-Per_G = '{:.1f}'.format(100 * int(Num[3]) / str_len)
+Num = s.count()
+Per_A = '{:.1f}'.format(100 * int(Num['A']) / str_len)
+Per_C = '{:.1f}'.format(100 * int(Num['C']) / str_len)
+Per_T = '{:.1f}'.format(100 * int(Num['T']) / str_len)
+Per_G = '{:.1f}'.format(100 * int(Num['G']) / str_len)
 
 termcolor.cprint('Total Length', 'green', end='')
 print(f": {str_len}")
 
 termcolor.cprint('A', 'blue', end='')
-print(f': {Num[0]} ({Per_A}%)')
+print(f': {Num["A"]} ({Per_A}%)')
 
 termcolor.cprint('C', 'blue', end='')
-print(f": {Num[1]} ({Per_C}%)")
-
-termcolor.cprint('G', 'blue', end='')
-print(f": {Num[2]} ({Per_G}%)")
+print(f': {Num["C"]} ({Per_C}%)')
 
 termcolor.cprint('T', 'blue', end='')
-print(f': {Num[3]} ({Per_T}%)')
+print(f': {Num["T"]} ({Per_G}%)')
+
+termcolor.cprint('G', 'blue', end='')
+print(f': {Num["G"]} ({Per_T}%)')
 
 m = max(Num)
 
-termcolor.cprint('Most frequent', 'green', end='')
-print(f': {m}')
+# -- Dictionary with the values
+d = s.count()
+
+# -- Create a list with all the values
+ll = list(d.values())
+
+# -- Calculate the maximum
+m = max(ll)
+
+# -- Print the base
+termcolor.cprint("Most frequent Base", 'green', end="")
+print(f": {BASES[ll.index(m)]}")
