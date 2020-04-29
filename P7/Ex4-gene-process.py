@@ -65,10 +65,10 @@ s = Seq(g_str)
 str_len = s.len()
 
 Num = s.count()
-Per_A = '{:.1f}'.format(100 * int(Num['A']) / str_len)
-Per_C = '{:.1f}'.format(100 * int(Num['C']) / str_len)
-Per_T = '{:.1f}'.format(100 * int(Num['T']) / str_len)
-Per_G = '{:.1f}'.format(100 * int(Num['G']) / str_len)
+Per_A = 100 * int(Num['A']) / str_len
+Per_C = 100 * int(Num['C']) / str_len
+Per_T = 100 * int(Num['T']) / str_len
+Per_G = 100 * int(Num['G']) / str_len
 
 termcolor.cprint('Total Length', 'green', end='')
 print(f": {str_len}")
@@ -91,11 +91,11 @@ m = max(Num)
 d = s.count()
 
 # -- Create a list with all the values
-ll = list(d.values())
+v = list(d.values())
 
 # -- Calculate the maximum
-m = max(ll)
+m = max(v)
 
 # -- Print the base
 termcolor.cprint("Most frequent Base", 'green', end="")
-print(f": {BASES[ll.index(m)]}")
+print(f": {bases[v.index(m)]}")
