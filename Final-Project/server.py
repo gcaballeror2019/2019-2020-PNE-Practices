@@ -44,114 +44,58 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         contents = Path('Error.html').read_text()
         status = 404
 
-        # -- Gives a response depending of the existence of de
-        if verb == '/':
-            # Open index file (HTML)
-            contents = Path('index').read_text()
+        # -- Gives as response the index.html if there is no requested action
+        try:
+            if verb == '/':
+                contents = Path('index.html').read_text()
 
-        elif verb == '/listSpecies':
-            # Verification page to show that the server is on-line
-            contents = '''
-                        <!DOCTYPE html>
-                        <html lang='en'>
-                        <head>
-                            <meta charset='utf-8'>
-                            <title>List of species</title>
-                        </head>
-                        <body>
-                        <p> The total number of species in ensembl is: 267 </p>'''
+            elif verb == '/listSpecies':
+                contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>List of species in the browser</title >
+                                </head >
+                                <body>
+                                <p>The total number of species in ensembl is: 267</p>"""
+                pair = arguments[1]
+                s_name = pair.split('?')
+                name, i = s_name[0].split('=')
+                contents += f"""<{i}>"""
+                end_p = 'info/species'
+                connect = http.client.HTTPConnection(server)
+                req = end_p + params
 
-            status = 200
-        elif verb == '/karyotype':
-            # -- HTML
-            contents = f"""
-                        <!DOCTYPE html>
-                        <html lang = "en">
-                        <head>
-                        <meta charset = "utf-8" >
-                          <title> GET </title >
-                        </head >
-                        <body>
-                        <h2>Karyotype</h2>
-                        <p>The names of the chromosomes are:</p>"""
-
-
-            status = 200
-
-        elif verb == '/chromosomeLength':
-            # -- Get the argument to the right of the ? symbol
-            pair = arguments[1]
-            # -- Get all the pairs name = value
-            pairs = pair.split('&')
-            # -- Get the two elements: name and value
-            s_name, spce = pairs[0].split('=')
-            ch_index, chr = pairs[1].split('=')
-            # -- Generate the html code
-            contents = f"""
-                                   <!DOCTYPE html>
-                                   <html lang = "en">
-                                   <head>
-                                   <meta charset = "utf-8" >
-                                     <title> GENE </title >
-                                   </head >
-                                   <body>
-                                   <h2> Gene: {gene}</h2>
-                                   <textarea readonly rows="20" cols="80"> {gene_str} </textarea>
-                                   <br>
-                                   <br>
-                                   <a href="/">Main page</a>
-                                   </body>
-                                   </html>
-                                   """
-            status = 200
-        elif verb == '/geneSeq':
-            # -- Get the argument to the right of the ? symbol
-            pair = arguments[1]
-            # -- Get all the pairs name = value
-            pairs = pair.split('&')
-            # -- Get the two elements: name and value, and the operation name w/ the chosen operation
-            name, seq = pairs[0].split('=')
-            o_name, operation = pairs[1].split('=')
-            seq = Seq(seq)
-            if operation == 'Rev':
-                result = seq.reverse()
-            elif operation == 'Comp':
-                result = seq.complement()
-            else:
-                # We calculate the length, amount of bases and the percentage they occupy in the sequence
-                g_len = seq.len()
-                counter = seq.count()
-                per_a = 100 * int(counter['A']) / g_len
-                per_c = 100 * int(counter['C']) / g_len
-                per_t = 100 * int(counter['T']) / g_len
-                per_g = 100 * int(counter['G']) / g_len
-                result = f"""
-                    <p>Total length: {g_len}</p>
-                    <p>A: {counter['A']} ({per_a}%)</p>
-                    <p>C: {counter['C']} ({per_c}%)</p>
-                    <p>G: {counter['T']} ({per_t}%)</p>
-                    <p>T: {counter['G']} ({per_g}%)</p>"""
-            contents = f"""
-                <!DOCTYPE html>
-                <html lang = "en">
-                <head>
-                <meta charset = "utf-8" >
-                    <title> Operations </title >
-                </head >
-                <body>
-                <h2> Seq:</h2>
-                <p>{seq}</p>
-                <h2> Operation: </h2>
-                <p>{operation}</p>
-                <h2> Result: </h2>
-                <p>{result}</p>
-                <br>
-                <br>
-                <a href="/">Main page</a>
-                </body>
-                </html>
-                """
-            status = 200
+                try:
+                    connect.request('GET', req)
+                except ConnectionRefusedError:
+                    print('An error has occurred, Can´t connect to the server')
+                    exit()
+                resp = connect.getresponse()
+                main_b = resp.read().decode()
+                lim_l = []
+                main_b = json.loads(main_b)
+                lim = main_b['species']
+                if i > len(lim):
+                    contents = f"""<!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                             <meta charset = "utf-8" >
+                             <title>error</title >
+                            </head>
+                            <body>
+                            <p>ERROR Limit not found. Introduce a valid value</p>
+                            <a href="/">Main page</a></body></html>"""
+                else:
+                    for e in lim:
+                        lim_l.append(e['display_name'])
+                        if len(lim_l) == i:
+                            contents += f"""<p>The species are:</p>"""
+                            for s in lim_l:
+                                contents += f"""<p> - {s}</p>"""
+                    contents += f"""<a href='/'> [Main page] </a></body></html>"""
+        except (KeyError, ValueError, IndexError, TypeError):
+            contents = Path('error.html').read_text()
         # -- Generating the response message
         self.send_response(status)
 
