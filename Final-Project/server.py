@@ -180,7 +180,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
 
-
+            # -- Return information about the karyotype of a specie: The name (usually a number) of all the chromosomes
             elif "/karyotype" in task:
 
                 # -- We create a html 'template'
@@ -269,6 +269,95 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                         contents += f"""<p> > {i} </p>"""
                                 else:
                                     contents = Path("error.html").read_text()
+
+                        # -- If the selected species doesn't exist or is not present in esembl:
+                        elif f"{response.status} {response.reason}" == "400 Bad Request":
+                            contents = f"""
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>Error</title >
+                            </head >
+                            <body>
+                            <p> The resource req. is not available or doesn't exist</p>
+                            """
+
+                        # -- If no input is entered:
+                        elif f"{response.status} {response.reason}" == "404 Not Found":
+                            contents = Path("error.html").read_text()
+
+                    contents += f"""<a href="/">Main page</a></body></html>"""
+
+                except ValueError:
+                    contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>error</title >
+                                </head>
+                                <body>
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
+
+            # -- Return the Length of the chromosome named "chromo" of the given specie
+            elif "/chromosomeLength" in task:
+
+                # -- We extract the specie selected:
+                selection = arguments[1]
+
+                # -- 1) Obtained name of the species
+                g_sel_species = selection.split("&")[0]
+                sel_n = g_sel_species.split("=")[1]
+
+                # -- 2) Chromosome:
+                g_region_n = selection.split("&")[1]
+                region_n = g_region_n.split("=")[1]
+
+                # -- This endpoint lists:  -Info. from the specified top-level seq. of the selected species
+
+                end_p = f"info/assembly/{sel_n}/{region_n}"
+
+                try:
+
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body)
+
+                    # -- We create a html 'template'
+                    contents = f"""
+                                                    <!DOCTYPE html>
+                                                    <html lang = "en">
+                                                    <head>
+                                                    <meta charset = "utf-8" >
+                                                        <title>List of species</title >
+                                                    </head >
+                                                    <body>
+                                                    """
+
+                    # -- We fix the karyotype from the dictionary. 'Karyotype is a key of the dict.
+                    for k, v in all_s_dict.items():
+                        if k == "length":
+                            len_ch = str(v)
+                            contents += f"""<p>The length of the selected chromosome is: {len_ch}</p>"""
 
                         # -- If the selected species doesn't exist or is not present in esembl:
                         elif f"{response.status} {response.reason}" == "400 Bad Request":
