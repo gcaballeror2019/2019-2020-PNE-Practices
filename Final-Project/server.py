@@ -1,114 +1,201 @@
-from Seq1 import Seq
-from pathlib import Path
 import http.server
-import termcolor
 import socketserver
+import termcolor
+from pathlib import Path
 import json
-import http.client
 
 
-# Server's Port
+# -- Define the Server's port
 PORT = 8080
 
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 
+# -- Def. the list of seq. for GET option:
+SEQ_GET = [
+    "ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA",
+    "AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA",
+    "CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT",
+    "CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA",
+    "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
+]
 
-# -- Server used for the project
-server = 'rest.esembl.org'
-params = '?content-type=application/json'
 
-# Class with our Handler. It is a called derived from BaseHTTPRequestHandler
-# It means that our class inherits all his methods and properties
+# -- Class with our Handler. It is a called derived from BaseHTTPRequestHandler
+# -- It means that our class inherits all his methods and properties
+
 class TestHandler(http.server.BaseHTTPRequestHandler):
+    global contents
 
     def do_GET(self):
         """This method is called whenever the client invokes the GET method
         in the HTTP protocol request"""
 
-        # -- Print the request line
+        server = "rest.ensembl.org"
+        params = "?content-type=application/json"
+
+        # -- Print req_line
         termcolor.cprint(self.requestline, 'green')
 
-        # -- Analyze the request line
+        # -- Analyze the req_line:
         req_line = self.requestline.split(' ')
 
-        # -- Get the path. It always start with the / symbol
+        # -- Get the path that starts with "/"
         path = req_line[1]
 
-        # --  Check all the arguments
+        # -- Read the arguments
         arguments = path.split('?')
 
-        # -- The verb is located as the first argument
-        verb = arguments[0]
+        # -- Get the order asked
+        action = arguments[0]
 
+        # -- Def. the contents and the status:
         contents = Path('Error.html').read_text()
-        status = 404
+        status = 200
 
-        # -- Gives as response the index.html if there is no requested action
         try:
-            if verb == '/':
+
+            # -- Main page (index):
+            if action == "/":
                 contents = Path('index.html').read_text()
 
-            elif verb == '/listSpecies':
-                contents = f"""<!DOCTYPE html>
+            # _______ Basic Lv. _______
+
+            # -- List Species: List the names of all the species available in the database. Might be limited by the user
+            # by entering a limit
+
+            elif "/listSpecies" in action:
+
+                # -- We extract the input limit nº:
+                lim = arguments[1]
+
+                # -- This endpoint lists:  -All available species  -Aliases  -Available adaptor groups  -Data release.
+                end_p = "info/species"
+
+                try:
+
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body)
+
+                    # -- We def. a list for the species in the dat. base species:
+                    all_s_list = []
+
+                    # -- We fix the display each specie name from the dictionary. Each name is a element of
+                    # -- a list, representing the value of the key named species.
+
+                    for k, v in all_s_dict.items():
+                        if k == "species":
+                            for element in v:
+                                for k1, v1 in element.items():
+                                    if k1 == "display_name":
+                                        species = v1
+                                        # -- We add every specie to all_s_list:
+                                        all_s_list.append(species)
+
+                    contents = f"""
+                                <!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                <meta charset = "utf-8" >
+                                    <title>List of species</title >
+                                </head >
+                                <body>
+                                <p>Total number of species in the data base is: {len(all_s_list)}</p>
+                                """
+
+                    # -- We extract the order and the value from the input (limit):
+                    lim_a = lim.split("=")[0]
+                    lim_v = lim.split("=")[1]
+
+                    if lim_a == "limit":
+
+                        # -- Is a limit value is entered:
+                        if lim_v != "":
+                            contents += f"""<p>Number of species selected : {lim_v} </p>"""
+
+                            # -- Invalid limit values:
+                            if int(lim_v) > len(all_s_list) or int(lim_v) == 0 or int(
+                                    lim_v) < 0:
+                                contents = f"""<!DOCTYPE html>
+                                                    <html lang = "en">
+                                                    <head>
+                                                        <meta charset = "utf-8" >
+                                                        <title>ERROR</title >
+                                                    </head>
+                                                    <body>
+                                                    <p>Limit out of range.
+                                                    Introduce a valid limit </p>
+                                                    </body></html>"""
+                            else:
+                                # -- We separate the first n species (n = lim ordered by the user)
+                                limit_species_list = all_s_list[:(int(lim_v))]
+                                contents += f"""<p>The species are: </p>"""
+
+                                # -- Individual print of the species:
+                                for species in limit_species_list:
+                                    contents += f"""<p> > {species} </p>"""
+
+                            contents += f"""<a href="/">Main page</a></body></html>"""
+
+                        # -- If no limit input, all the species will be displayed:
+                        else:
+                            contents += f"""<p>No integer introduced. All species are going to be displayed. </p>
+                                        <p>The species are: </p>"""
+
+                            # The species are printed one by one:
+                            for species in all_s_list:
+                                contents += f"""<p> > {species} </p>"""
+                            contents += f"""<a href="/">Main page</a></body></html>"""
+
+                    else:
+                        contents = Path('Error.html').read_text()
+
+                except ValueError:
+                    contents = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
-                                 <title>List of species in the browser</title >
-                                </head >
+                                 <title>error</title >
+                                </head>
                                 <body>
-                                <p>The total number of species in ensembl is: 267</p>"""
-                pair = arguments[1]
-                s_name = pair.split('?')
-                name, i = s_name[0].split('=')
-                contents += f"""<{i}>"""
-                end_p = 'info/species'
-                connect = http.client.HTTPConnection(server)
-                req = end_p + params
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
 
-                try:
-                    connect.request('GET', req)
-                except ConnectionRefusedError:
-                    print('An error has occurred, Can´t connect to the server')
-                    exit()
-                resp = connect.getresponse()
-                main_b = resp.read().decode()
-                lim_l = []
-                main_b = json.loads(main_b)
-                lim = main_b['species']
-                if i > len(lim):
-                    contents = f"""<!DOCTYPE html>
-                            <html lang = "en">
-                            <head>
-                             <meta charset = "utf-8" >
-                             <title>error</title >
-                            </head>
-                            <body>
-                            <p>ERROR Limit not found. Introduce a valid value</p>
-                            <a href="/">Main page</a></body></html>"""
-                else:
-                    for e in lim:
-                        lim_l.append(e['display_name'])
-                        if len(lim_l) == i:
-                            contents += f"""<p>The species are:</p>"""
-                            for s in lim_l:
-                                contents += f"""<p> - {s}</p>"""
-                    contents += f"""<a href='/'> [Main page] </a></body></html>"""
         except (KeyError, ValueError, IndexError, TypeError):
             contents = Path('error.html').read_text()
-        # -- Generating the response message
-        self.send_response(status)
+            contents += f"""<p><a href="/">Main page </a></body></html>"""
 
-        # -- Define the content-type header:
-        content_type = 'text/html'
-        self.send_header('Content-Type', content_type)
-        self.send_header('Content-Length', len(contents.encode()))
+        # -- Gen. the resp. message
+        self.send_response(status)  # -- Status line: OK!
+
+        # -- Def. the content-type header:
+        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Length', len(str.encode(contents)))
 
         # -- The header is finished
         self.end_headers()
 
-        # -- Send the response message
-        self.wfile.write(contents.encode())
+        # -- Send the response
+        self.wfile.write(str.encode(contents))
 
         return
 
@@ -120,7 +207,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 Handler = TestHandler
 
 # -- Open the socket server
-with socketserver.TCPServer(('', PORT), Handler) as httpd:
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
     print("Serving at PORT", PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
@@ -128,6 +215,6 @@ with socketserver.TCPServer(('', PORT), Handler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print('')
-        print('Stopped by the user')
+        print("")
+        print("Stopped by the user")
         httpd.server_close()
