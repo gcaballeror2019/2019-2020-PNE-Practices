@@ -47,7 +47,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         arguments = path.split('?')
 
         # -- Get the order asked
-        action = arguments[0]
+        task = arguments[0]
 
         # -- Def. the contents and the status:
         contents = Path('Error.html').read_text()
@@ -56,7 +56,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         try:
 
             # -- Main page (index):
-            if action == "/":
+            if task == "/":
                 contents = Path('index.html').read_text()
 
             # _______ Basic Lv. _______
@@ -64,7 +64,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # -- List Species: List the names of all the species available in the database. Might be limited by the user
             # by entering a limit
 
-            elif "/listSpecies" in action:
+            elif "/listSpecies" in task:
 
                 # -- We extract the input limit nº:
                 lim = arguments[1]
@@ -99,7 +99,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     # -- We def. a list for the species in the dat. base species:
                     all_s_list = []
 
-                    # -- We fix the display each specie name from the dictionary. Each name is a element of
+                    # -- We fix the display of each specie name from the dictionary. Each name is a element of
                     # -- a list, representing the value of the key named species.
 
                     for k, v in all_s_dict.items():
@@ -168,6 +168,126 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     else:
                         contents = Path('Error.html').read_text()
+
+                except ValueError:
+                    contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>error</title >
+                                </head>
+                                <body>
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
+
+
+            elif "/karyotype" in task:
+
+                # -- We create a html 'template'
+                contents = f"""
+                    <!DOCTYPE html>
+                    <html lang = "en">
+                    <head>
+                    <meta charset = "utf-8" >
+                        <title>List of species</title >
+                    </head >
+                    <body>
+                    """
+
+                # -- We extract the specie selected:
+                selection = arguments[1]
+
+                # -- We separate the task and the name of this selection:
+                sel_a = selection.split("=")[0]
+                sel_n = selection.split("=")[1]
+
+                # -- This endpoint lists:  -Current available assemblies
+                # (w/ top level seq, chromosomes and cytogenetic bands).
+                end_p = f"info/assembly/{sel_n}"
+
+                try:
+
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body)
+
+                    # -- We def. a list for the species in the dat. base species:
+                    all_s_list = []
+
+                    # -- We create a html 'template'
+                    contents = f"""
+                                                    <!DOCTYPE html>
+                                                    <html lang = "en">
+                                                    <head>
+                                                    <meta charset = "utf-8" >
+                                                        <title>List of species</title >
+                                                    </head >
+                                                    <body>
+                                                    <p>Total number of species in the data base is: {len(all_s_list)}</p>
+                                                    """
+
+                    # -- We fix the karyotype from the dictionary. 'Karyotype is a key of the dict.
+                    for k, v in all_s_dict.items():
+                        if k == "karyotype":
+
+                            # -- If the specie selected doesn't have a karyotype info in the data base:
+                            if str(v) == "[]":
+                                contents = f"""
+                                <!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                <meta charset = "utf-8" >
+                                    <title>Error</title >
+                                </head >
+                                <body>
+                                <p> The resource req. is not available or doesn't exist</p>
+                                """
+                            else:
+                                if sel_a == 'species':
+                                    contents += f"""<p>The chromosomes requested are:</p>"""
+
+                                    # -- 'v' is the list of values (karyotype). Individual print
+                                    for i in v:
+                                        contents += f"""<p> > {i} </p>"""
+                                else:
+                                    contents = Path("error.html").read_text()
+
+                        # -- If the selected species doesn't exist or is not present in esembl:
+                        elif f"{response.status} {response.reason}" == "400 Bad Request":
+                            contents = f"""
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>Error</title >
+                            </head >
+                            <body>
+                            <p> The resource req. is not available or doesn't exist</p>
+                            """
+
+                        # -- If no input is entered:
+                        elif f"{response.status} {response.reason}" == "404 Not Found":
+                            contents = Path("error.html").read_text()
+
+                    contents += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
                     contents = f"""<!DOCTYPE html>
