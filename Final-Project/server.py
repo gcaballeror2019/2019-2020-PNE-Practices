@@ -33,22 +33,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         server = "rest.ensembl.org"
         params = "?content-type=application/json"
-
         # -- Print req_line
         termcolor.cprint(self.requestline, 'green')
-
         # -- Analyze the req_line:
         req_line = self.requestline.split(' ')
-
         # -- Get the path that starts with "/"
         path = req_line[1]
-
         # -- Read the arguments
         arguments = path.split('?')
-
         # -- Get the order asked
         task = arguments[0]
-
         # -- Def. the contents and the status:
         content = Path('Error.html').read_text()
         status = 200
@@ -65,10 +59,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # by entering a limit
 
             elif "/listSpecies" in task:
-
                 # -- We extract the input limit nº:
                 lim = arguments[1]
-
                 # -- This endpoint lists:  -All available species  -Aliases  -Available adaptor groups  -Data release.
                 end_p = "info/species"
 
@@ -86,16 +78,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- Read the response
                     response = connect.getresponse()
-
                     # -- Print the status line
                     print(f"Response from esembl received: {response.status} {response.reason}\n")
-
                     # -- Read the response:
                     body = response.read().decode("utf-8")
-
                     # -- We convert the body (str > dict):
                     all_s_dict = json.loads(body)
-
                     # -- We def. a list for the species in the dat. base species:
                     all_s_list = []
 
@@ -118,7 +106,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <meta charset = "utf-8" >
                                     <title>List of species</title >
                                 </head >
-                                <body>
+                                <body style="background-color:lightblue;">
+                                <h1>List of Species</h1>
+                                <hr>
                                 <p>Total number of species in the data base is: {len(all_s_list)}</p>
                                 """
 
@@ -130,7 +120,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                         # -- Is a limit value is entered:
                         if lim_v != "":
-                            content += f"""<p>Number of species selected : {lim_v} </p>"""
+                            content += f"""<p>Number of species selected : {lim_v} </p><hr>"""
 
                             # -- Invalid limit values:
                             if int(lim_v) > len(all_s_list) or int(lim_v) == 0 or int(
@@ -142,13 +132,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                                         <title>ERROR</title >
                                                     </head>
                                                     <body>
-                                                    <p>Limit out of range.
-                                                    Introduce a valid limit </p>
+                                                    <h1><span style="color:red;">Limit out of range.</span></h1>
+                                                    <p><span style="color:red;">Introduce a valid limit </span></p>
                                                     </body></html>"""
                             else:
                                 # -- We separate the first n species (n = lim ordered by the user)
                                 limit_species_list = all_s_list[:(int(lim_v))]
-                                content += f"""<p>The species are: </p>"""
+                                content += f"""<b>The species are: </b>"""
 
                                 # -- Individual print of the species:
                                 for species in limit_species_list:
@@ -167,7 +157,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             content += f"""<a href="/">Main page</a></body></html>"""
 
                     else:
-                        content = Path('Error.html').read_text()
+                        content = Path('error.html').read_text()
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>
@@ -177,7 +167,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
-                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <h1><span style="color:red;">Error:</span></h1>
+                                <p><span style="color:red;">You entered an invalid value. 
+                                Introduce an integer value for limit</span></p>
                                 <a href="/">Main page</a></body></html>"""
 
             # -- Return information about the karyotype of a specie: The name (usually a number) of all the chromosomes
@@ -185,11 +177,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 # -- We extract the specie selected:
                 selection = arguments[1]
-
                 # -- We separate the task and the name of this selection:
                 sel_a = selection.split("=")[0]
                 sel_n = selection.split("=")[1]
-
                 # -- This endpoint lists:  -Current available assemblies
                 # (w/ top level seq, chromosomes and cytogenetic bands).
                 end_p = f"info/assembly/{sel_n}"
@@ -208,31 +198,29 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- Read the response
                     response = connect.getresponse()
-
                     # -- Print the status line
                     print(f"Response from esembl received: {response.status} {response.reason}\n")
-
                     # -- Read the response:
                     body = response.read().decode("utf-8")
-
                     # -- We convert the body (str > dict):
                     all_s_dict = json.loads(body)
-
                     # -- We def. a list for the species in the dat. base species:
                     all_s_list = []
 
                     # -- We create a html 'template'
                     content = f"""
-                                                    <!DOCTYPE html>
-                                                    <html lang = "en">
-                                                    <head>
-                                                    <meta charset = "utf-8" >
-                                                        <title>List of species</title >
-                                                    </head >
-                                                    <body>
-                                                    <p>Total number of species in the
-                                                    data base is: {len(all_s_list)}</p>
-                                                    """
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body style="background-color:lightblue;">
+                            <h1>Karyotype of the selected specie</h1>
+                            <hr>
+                            <p>Total number of species in the
+                            data base is: {len(all_s_list)}</p>
+                            """
 
                     # -- We fix the karyotype from the dictionary. 'Karyotype is a key of the dict.
                     for k, v in all_s_dict.items():
@@ -248,12 +236,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                     <title>Error</title >
                                 </head >
                                 <body>
-                                <p> The resource req. is not available or doesn't exist</p>
+                                <h1><span style="color:red;">Empty karyotype</span></h1>
+                                <p><span style="color:red;">The resource req. is not available or does not exist
+                                </span></p>
                                 """
+
                             else:
                                 if sel_a == 'species':
                                     content += f"""<p>The chromosomes requested are:</p>"""
-
                                     # -- 'v' is the list of values (karyotype). Individual print
                                     for i in v:
                                         content += f"""<p> > {i} </p>"""
@@ -270,7 +260,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <title>Error</title >
                             </head >
                             <body>
-                            <p> The resource req. is not available or doesn't exist</p>
+                            <h1><span style="color:red;">400 Bad Request:</span></h1>
+                            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
                             """
 
                         # -- If no input is entered:
@@ -287,7 +278,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
-                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <p><span style="color:red;">Error: You entered an invalid value. 
+                                Introduce a valid specie</span></p>
                                 <a href="/">Main page</a></body></html>"""
 
             # -- Return the Length of the chromosome named "chromo" of the given specie
@@ -295,17 +287,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 # -- We extract the specie selected:
                 selection = arguments[1]
-
                 # -- 1) Obtained name of the species
                 g_sel_species = selection.split("&")[0]
                 sel_n = g_sel_species.split("=")[1]
-
                 # -- 2) Chromosome:
                 g_region_n = selection.split("&")[1]
                 region_n = g_region_n.split("=")[1]
-
                 # -- This endpoint lists:  -Info. from the specified top-level seq. of the selected species
-
                 end_p = f"info/assembly/{sel_n}/{region_n}"
 
                 try:
@@ -322,32 +310,31 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- Read the response
                     response = connect.getresponse()
-
                     # -- Print the status line
                     print(f"Response from esembl received: {response.status} {response.reason}\n")
-
                     # -- Read the response:
                     body = response.read().decode("utf-8")
-
                     # -- We convert the body (str > dict):
                     all_s_dict = json.loads(body)
 
                     # -- We create a html 'template'
                     content = f"""
-                                                    <!DOCTYPE html>
-                                                    <html lang = "en">
-                                                    <head>
-                                                    <meta charset = "utf-8" >
-                                                        <title>List of species</title >
-                                                    </head >
-                                                    <body>
-                                                    """
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body style="background-color:lightblue;">
+                            <h1>Chromosome's Length</h1><hr>
+                            """
 
                     # -- We fix the karyotype from the dictionary. 'Karyotype is a key of the dict.
                     for k, v in all_s_dict.items():
                         if k == "length":
                             len_ch = str(v)
-                            content += f"""<p>The length of the selected chromosome is: {len_ch}</p>"""
+                            content += f"""<p>The length of the selected chromosome is:</p>
+                                        <p> {len_ch}</p>"""
 
                         # -- If the selected species doesn't exist or is not present in esembl:
                         elif f"{response.status} {response.reason}" == "400 Bad Request":
@@ -359,7 +346,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <title>Error</title >
                             </head >
                             <body>
-                            <p> The resource req. is not available or doesn't exist</p>
+                            <h1><span style="color:red;">Error:</span></h1>   
+                            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
                             """
 
                         # -- If no input is entered:
@@ -376,17 +364,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
-                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <h1><span style="color:red;">Error:</span></h1>
+                                <p><span style="color:red;">You entered an invalid value.
+                                Introduce an integer value for limit</span></p>
                                 <a href="/">Main page</a></body></html>"""
+
+
             # _______ Medium Lv. _______
             elif "/geneSeq" in task:
 
                 # -- We extract the specie selected:
                 selection = arguments[1]
-
                 # --Obtain name of the species
                 sel_n = selection.split("=")[1]
-
                 # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
                 end_p_1 = f"/xrefs/symbol/homo_sapiens/{sel_n}"
 
@@ -447,18 +437,20 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- We create a html 'template'
                     content = f"""
-                                                    <!DOCTYPE html>
-                                                    <html lang = "en">
-                                                    <head>
-                                                    <meta charset = "utf-8" >
-                                                        <title>List of species</title >
-                                                    </head >
-                                                    <body>
-                                                    """
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body style="background-color:lightblue;">
+                            <h1>Gene Sequencing</h1><hr>
+                            """
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK" \
                             or f"{response_2.status} {response_2.reason}" == "200 OK":
-                        content += f"""<p>The seq. of {st_id} is: {seq}</p>"""
+                        content += f"""<p>The seq. of {st_id} is:</p>
+                                    <p>{seq}</p>"""
 
                     # -- If the selected species doesn't exist or is not present in esembl:
                     elif f"{response.status} {response.reason}" == "400 Bad Request":
@@ -470,6 +462,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <title>Error</title >
                         </head >
                         <body>
+                        <h1><span style="color:red;">Error:</span></h1>
                         <p> The resource req. is not available or doesn't exist</p>
                         """
 
@@ -487,6 +480,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
+                                <h1><span style="color:red;">Error:</span></h1>
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
             # -- Return information about a human gene: start, end, Length, id and Chromose
@@ -569,12 +563,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <meta charset = "utf-8" >
                                 <title>List of species</title >
                             </head >
-                            <body>
+                            <body style="background-color:lightblue;">
                             """
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK" \
                             or f"{response_2.status} {response_2.reason}" == "200 OK":
-                        content += f"""<h1>{sel_n}</h1>
+                        content += f"""<h1>{sel_n}</h1><hr>
                                     <p>Start Value: {start}</p>
                                     <p>End Value: {finish}</p>
                                     <p>Length Value: {length}</p>
@@ -591,6 +585,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <title>Error</title >
                         </head >
                         <body>
+                        <h1><span style="color:red;">Error:</span></h1>
                         <p> The resource req. is not available or doesn't exist</p>
                         """
 
@@ -608,16 +603,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
+                                <h1><span style="color:red;">Error:</span></h1>
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
 
             # -- Performs some calculations on the given human gene and returns the total length
             # and the percentage of all its bases
             elif "/geneCalc" in task:
-
                 # -- We extract the specie selected:
                 selection = arguments[1]
-
                 # --Obtain name of the species
                 sel_n = selection.split("=")[1]
                 print(sel_n)
@@ -684,7 +678,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <meta charset = "utf-8" >
                                 <title>List of species</title >
                             </head >
-                            <body>
+                            <body style="background-color:lightblue;">
                             """
 
                     # -- If the input is valid:
@@ -697,14 +691,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         # -- Length
                         length = s.len()
                         base_l = ["A", "C", "T", "G"]
-                        base_r = ""
                         count = s.count()
-                        print(count)
-                        for i in base_l:
-                            per = round((count[i] / length) * 100, 2)
-                            base_r += f"""{base_l[i]}: {count[i]} {per}%"""
-                        content = content + f"""<h1>{sel_n}:</h1>
-                                    <p>Tot. length of the gene: {length}</p>""" + base_r
+                        b_a = count["A"]
+                        b_c = count["C"]
+                        b_t = count["T"]
+                        b_g = count["G"]
+                        base_r = f"""<p>{base_l[0]}: {b_a} ({round((b_a / length) * 100, 2)}%)</p>
+                                <p>{base_l[1]}: {b_c} ({round((b_c / length) * 100, 2)}%)</p>
+                                <p>{base_l[2]}: {b_t} ({round((b_t / length) * 100, 2)}%)</p>
+                                <p>{base_l[3]}: {b_g} ({round((b_g / length) * 100, 2)}%)</p>"""
+                        content = content + f"""<h1>{sel_n}:</h1><hr>
+                        <p>Tot. length of the gene: {length}</p>""" + base_r
 
 
                     # -- If the selected species doesn't exist or is not present in esembl:
@@ -718,6 +715,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <title>Error</title >
                         </head >
                         <body>
+                        <h1><span style="color:red;">Error:</span></h1>
                         <p> The resource req. is not available or doesn't exist</p>
                         """
 
@@ -736,6 +734,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
+                                <h1><span style="color:red;">Error:</span></h1>
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
 
@@ -753,9 +752,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 sel_c = chromo.split("=")[1]
                 sel_s = start.split("=")[1]
                 sel_f = finish.split("=")[1]
-
                 # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
-                end_p = f"/overlap/region/human/{sel_c}:{sel_s}-{sel_f}"
+                end_p = f"overlap/region/human/{sel_c}:{sel_s}-{sel_f}"
 
                 try:
                     # Connect with the server
@@ -763,7 +761,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- Send the request message, using the GET method. The main page is requested
                     try:
-                        connect.request("GET", end_p + params)
+                        connect.request("GET", end_p + '?feature=gene;content-type=application/json')
                     except ConnectionRefusedError:
                         print("ERROR! Cannot connect to the Server")
                         exit()
@@ -805,6 +803,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <title>Error</title >
                         </head >
                         <body>
+                        <h1><span style="color:red;">Error:</span></h1>
                         <p> The resource req. is not available or doesn't exist</p>
                         """
 
@@ -822,6 +821,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                  <title>error</title >
                                 </head>
                                 <body>
+                                <h1><span style="color:red;">Error:</span></h1>
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
 
