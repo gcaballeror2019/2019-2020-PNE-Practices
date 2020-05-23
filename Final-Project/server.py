@@ -499,6 +499,128 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <body>
                                 <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
                                 <a href="/">Main page</a></body></html>"""
+            # -- Return information about a human gene: start, end, Length, id and Chromose
+            elif "/geneInfo" in task:
+
+                # -- We extract the specie selected:
+                selection = arguments[1]
+
+                # --Obtain name of the species
+                sel_n = selection.split("=")[1]
+
+                # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
+                end_p_1 = f"/xrefs/symbol/homo_sapiens/{sel_n}"
+
+                try:
+
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p_1 + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body_1 = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body_1)
+
+                    # -- First element contains the stable ID:
+                    dct_st = all_s_dict[0]
+
+                    # -- Extraction of the stable ID:
+                    st_id = dct_st["id"]
+
+                    # -- 2) This endpoint lists:  -Info of that gene/seq (st_id)
+                    end_p_2 = f"lookup/id/{st_id}"
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p_2 + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response_2 = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response_2.status} {response_2.reason}\n")
+
+                    # -- Read the response:
+                    body_2 = response_2.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict_2 = json.loads(body_2)
+
+                    # -- Extraction of the 'start' and 'end' values
+                    start = all_s_dict_2["start"]
+                    finish = all_s_dict_2["end"]
+                    length = int(finish) - int(start)
+
+                    id = all_s_dict_2["id"]
+                    chromose = all_s_dict_2["seq_region_name"]
+
+                    # -- We create a html 'template'
+                    contents = f"""
+                                                    <!DOCTYPE html>
+                                                    <html lang = "en">
+                                                    <head>
+                                                    <meta charset = "utf-8" >
+                                                        <title>List of species</title >
+                                                    </head >
+                                                    <body>
+                                                    """
+                    # -- If the input is valid:
+                    if f"{response.status} {response.reason}" == "200 OK" \
+                            or f"{response_2.status} {response_2.reason}" == "200 OK":
+                        contents += f"""<h1>{sel_n}</h1>
+                                    <p>Start Value: {start}</p>
+                                    <p>End Value: {finish}</p>
+                                    <p>Length Value: {length}</p>
+                                    <p>Stable Id: {id}</p>
+                                    <p>Chromose: {chromose}</p>"""
+
+                    # -- If the selected species doesn't exist or is not present in esembl:
+                    elif f"{response.status} {response.reason}" == "400 Bad Request":
+                        contents = f"""
+                        <!DOCTYPE html>
+                        <html lang = "en">
+                        <head>
+                        <meta charset = "utf-8" >
+                            <title>Error</title >
+                        </head >
+                        <body>
+                        <p> The resource req. is not available or doesn't exist</p>
+                        """
+
+                    # -- If no input is entered:
+                    elif f"{response.status} {response.reason}" == "404 Not Found":
+                        contents = Path("error.html").read_text()
+
+                    contents += f"""<a href="/">Main page</a></body></html>"""
+
+                except ValueError:
+                    contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>error</title >
+                                </head>
+                                <body>
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
+
         except (KeyError, ValueError, IndexError, TypeError):
             contents = Path('error.html').read_text()
             contents += f"""<p><a href="/">Main page </a></body></html>"""
