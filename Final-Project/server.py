@@ -335,6 +335,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             len_ch = str(v)
                             content += f"""<p>The length of the selected chromosome is:</p>
                                         <p> {len_ch}</p>"""
+                            content += f"""<a href="/">Main page</a></body></html>"""
 
                         # -- If the selected species doesn't exist or is not present in esembl:
                         elif f"{response.status} {response.reason}" == "400 Bad Request":
@@ -349,12 +350,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <h1><span style="color:red;">Error:</span></h1>   
                             <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
                             """
+                            content += f"""<a href="/">Main page</a></body></html>"""
 
                         # -- If no input is entered:
                         elif f"{response.status} {response.reason}" == "404 Not Found":
                             content = Path("error.html").read_text()
-
-                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>

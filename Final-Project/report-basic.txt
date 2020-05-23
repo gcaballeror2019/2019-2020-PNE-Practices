@@ -1,0 +1,398 @@
+Basic Lv. Report:
+____________________________
+
+    -List of Species:
+
+        >Test 1: Limit = 10
+
+            /Input: http://localhost:8080/listSpecies?limit=10
+
+            /Output: <html lang="en"><head>
+                                <meta charset="utf-8">
+                                    <title>List of species</title>
+                                </head>
+                                <body style="background-color:lightblue;">
+                                <h1>List of Species</h1>
+                                <hr>
+                                <p>Total number of species in the data base is: 286</p>
+                                <p>Number of species selected : 10 </p><hr>
+                                <b>The species are: </b>
+                                <p> &gt; Pig - Rongchang </p><p> &gt; Pika </p><p> &gt; African ostrich </p>
+                                <p> &gt; Nile tilapia </p><p> &gt; Channel catfish </p>
+                                <p> &gt; West African mud turtle </p><p> &gt; Channel bull blenny </p>
+                                <p> &gt; Sooty mangabey </p><p> &gt; Dolphin </p><p> &gt; Naked mole-rat male </p>
+                                <a href="/">Main page</a></body></html>
+
+        >Test 2: Limit = asdf
+
+            /Input: http://127.0.0.1:8080/listSpecies?limit=asdf
+
+            /Output: <html lang="en"><head>
+                                 <meta charset="utf-8">
+                                 <title>error</title>
+                                </head>
+                                <body>
+                                <h1><span style="color:red;">Error:</span></h1>
+                                <p><span style="color:red;">You entered an invalid value.
+                                Introduce an integer value for limit</span></p>
+                                <a href="/">Main page</a></body></html>
+
+        >Test 3: Limit = 'none'
+
+            /Input: http://127.0.0.1:8080/listSpecies?limit=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>List of Species</h1>
+            <hr>
+            <p>Total number of species in the data base is: 286</p>
+            <p>No integer introduced. All species are going to be displayed. </p>
+            <p>The species are: </p><p> &gt; Pig - Rongchang </p><p> &gt; Pika </p>
+            <p> &gt; African ostrich </p><p> &gt; Nile tilapia </p>
+            <p> &gt; Channel catfish </p><p> &gt; West African mud turtle </p>
+            <p> &gt; Channel bull blenny </p><p> &gt; Sooty mangabey </p>
+            <p> &gt; Dolphin </p><p> &gt; Naked mole-rat male </p><p> &gt; Brown trout </p>
+            <p> &gt; Eastern brown snake </p><p> &gt; Mouse CAST/EiJ </p>
+            <p> &gt; Spiny chromis </p><p> &gt; Gorilla </p><p> &gt; Silver-eye </p>
+            <p> &gt; Sloth </p><p> &gt; Eurasian sparrowhawk </p><p> &gt; Mouse AKR/J </p>
+            <p> &gt; Sailfin molly </p><p> &gt; Greater bamboo lemur </p>
+            <p> &gt; Mangrove rivulus </p><p> &gt; Platypus </p>
+            <p> &gt; Live sharksucker </p><p> &gt; Megabat </p>
+            <p> &gt; Mouse NOD/ShiLtJ </p><p> &gt; Ferret </p><p> &gt; Coelacanth </p>
+            <p> &gt; Lion </p><p> &gt; Siamese fighting fish </p>
+            <p> &gt; Pig - Wuzhishan </p><p> &gt; Brazilian guinea pig </p>
+            <p> &gt; Sheepshead minnow </p><p> &gt; Beluga whale </p>
+            <p> &gt; Domestic yak </p><p> &gt; Orbiculate cardinalfish </p>
+            <p> &gt; Chinese hamster CHOK1GS </p><p> &gt; Kakapo </p><p> &gt; Orangutan </p>
+            <p> &gt; Daurian ground squirrel </p><p> &gt; Pig - Bamei </p>
+            <p> &gt; Mouse BALB/cJ </p><p> &gt; Common carp huanghe </p>
+            <p> &gt; Three-toed box turtle </p><p> &gt; Tongue sole </p>
+            <p> &gt; Chimpanzee </p><p> &gt; Ma's night monkey </p>
+            <p> &gt; Red-bellied piranha </p><p> &gt; Pig - Tibetan </p><p> &gt; Drill </p>
+            <p> &gt; Anole lizard </p><p> &gt; Duck </p>
+            <p> &gt; Common carp german mirror </p><p> &gt; Chilean tinamou </p>
+            <p> &gt; Marmoset </p><p> &gt; Chinese medaka </p>
+            <p> &gt; Greater amberjack </p><p> &gt; Mouse </p><p> &gt; Dark-eyed junco </p>
+            <p> &gt; Mouse DBA/2J </p><p> &gt; Arctic ground squirrel </p><p> &gt; Pig </p>
+            <p> &gt; Mallard </p><p> &gt; Dog - Great Dane </p><p> &gt; Great Tit </p>
+            <p> &gt; Pig - Pietrain </p><p> &gt; Mainland tiger snake </p>
+            <p> &gt; Pig - Jinhua </p><p> &gt; Lesser hedgehog tenrec </p>
+            <p> &gt; Climbing perch </p><p> &gt; Tuatara </p><p> &gt; Wild yak </p>
+            <p> &gt; Bushbaby </p><p> &gt; Degu </p><p> &gt; Siberian musk deer </p>
+            <p> &gt; Northern pike </p><p> &gt; Pig - Meishan </p>
+            <p> &gt; Gilthead seabream </p><p> &gt; Kangaroo rat </p>
+            <p> &gt; Ring-necked pheasant </p><p> &gt; Mummichog </p>
+            <p> &gt; American mink </p><p> &gt; Tasmanian devil </p>
+            <p> &gt; Horned golden-line barbel </p><p> &gt; Shrew mouse </p>
+            <p> &gt; Golden Hamster </p><p> &gt; Pachon cavefish </p>
+            <p> &gt; Mouse PWK/PhJ </p><p> &gt; Hybrid - Bos Taurus </p>
+            <p> &gt; Canada lynx </p><p> &gt; Wallaby </p>
+            <p> &gt; Argentine black and white tegu </p><p> &gt; Monterrey platyfish </p>
+            <p> &gt; Blue tit </p><p> &gt; Japanese quail </p><p> &gt; Microbat </p>
+            <p> &gt; Panda </p><p> &gt; Chinook salmon </p><p> &gt; Hedgehog </p>
+            <p> &gt; Ryukyu mouse </p><p> &gt; Chinese hamster CriGri </p>
+            <p> &gt; Tree Shrew </p><p> &gt; Central bearded dragon </p>
+            <p> &gt; Amazon molly </p><p> &gt; Helmeted guineafowl </p>
+            <p> &gt; Stickleback </p><p> &gt; Northern American deer mouse </p>
+            <p> &gt; Saccharomyces cerevisiae </p><p> &gt; Dog - Basenji </p>
+            <p> &gt; Golden eagle </p><p> &gt; Tiger tail seahorse </p>
+            <p> &gt; Chacoan peccary </p><p> &gt; Japanese medaka HdrR </p>
+            <p> &gt; Lamprey </p><p> &gt; Mexican tetra </p>
+            <p> &gt; Common snapping turtle </p><p> &gt; American black bear </p>
+            <p> &gt; Okarito brown kiwi </p><p> &gt; Gouldian finch </p>
+            <p> &gt; Mongolian gerbil </p><p> &gt; C.intestinalis </p>
+            <p> &gt; Mouse LP/J </p><p> &gt; Great spotted kiwi </p>
+            <p> &gt; Western mosquitofish </p><p> &gt; Periophthalmus magnuspinnatus </p>
+            <p> &gt; Mouse 129S1/SvImJ </p><p> &gt; Flycatcher </p>
+            <p> &gt; Yellow-billed parrot </p><p> &gt; Mouse C57BL/6NJ </p>
+            <p> &gt; Pig-tailed macaque </p><p> &gt; Dingo </p><p> &gt; Rainbow trout </p>
+            <p> &gt; Alpaca </p><p> &gt; Zig-zag eel </p><p> &gt; Hagfish </p>
+            <p> &gt; Common carp </p><p> &gt; Armadillo </p><p> &gt; Pig - Largewhite </p>
+            <p> &gt; Opossum </p><p> &gt; Lyretail cichlid </p><p> &gt; Goat </p>
+            <p> &gt; Barramundi perch </p><p> &gt; Small tree finch </p>
+            <p> &gt; Mouse WSB/EiJ </p><p> &gt; American beaver </p>
+            <p> &gt; Pig - Landrace </p><p> &gt; Elephant shark </p>
+            <p> &gt; Sperm whale </p><p> &gt; Spotted gar </p><p> &gt; Mouse CBA/J </p>
+            <p> &gt; Blue tilapia </p><p> &gt; Platyfish </p>
+            <p> &gt; Medium ground-finch </p><p> &gt; Paramormyrops kingsleyae </p>
+            <p> &gt; Tarsier </p><p> &gt; Common wall lizard </p><p> &gt; Swan goose </p>
+            <p> &gt; Blue-ringed sea krait </p><p> &gt; Common canary </p>
+            <p> &gt; Chinese hamster PICR </p><p> &gt; Vervet-AGM </p>
+            <p> &gt; Golden-collared manakin </p><p> &gt; Long-tailed chinchilla </p>
+            <p> &gt; Zebra finch </p><p> &gt; C.savignyi </p><p> &gt; Rat </p>
+            <p> &gt; Ocean sunfish </p><p> &gt; Little spotted kiwi </p>
+            <p> &gt; Indian medaka </p><p> &gt; Cow </p><p> &gt; Leopard </p>
+            <p> &gt; Atlantic salmon </p><p> &gt; Alpine marmot </p>
+            <p> &gt; Large yellow croaker </p>
+            <p> &gt; Upper Galilee mountains blind mole rat </p>
+            <p> &gt; Goodes thornscrub tortoise </p><p> &gt; Indian peafowl </p>
+            <p> &gt; Common carp hebao red </p><p> &gt; Denticle herring </p>
+            <p> &gt; Koala </p><p> &gt; Midas cichlid </p><p> &gt; Golden-line barbel </p>
+            <p> &gt; Turbot </p><p> &gt; Ruff </p><p> &gt; Pig USMARC </p>
+            <p> &gt; Pig - Hampshire </p><p> &gt; Human </p><p> &gt; Burrowing owl </p>
+            <p> &gt; Cod </p><p> &gt; Burton's mouthbrooder </p><p> &gt; Donkey </p>
+            <p> &gt; Guinea Pig </p><p> &gt; Clown anemonefish </p>
+            <p> &gt; Golden pheasant </p><p> &gt; Sheep </p><p> &gt; Red fox </p>
+            <p> &gt; Bonobo </p><p> &gt; Indian glassy fish </p><p> &gt; Tetraodon </p>
+            <p> &gt; Ballan wrasse </p><p> &gt; Pig - Berkshire </p>
+            <p> &gt; Hybrid - Bos Indicus </p><p> &gt; Budgerigar </p><p> &gt; Meerkat </p>
+            <p> &gt; European seabass </p><p> &gt; Elephant </p><p> &gt; Emu </p>
+            <p> &gt; Tiger </p><p> &gt; Drosophila melanogaster </p>
+            <p> &gt; Steppe mouse </p><p> &gt; Swamp eel </p>
+            <p> &gt; Japanese medaka HNI </p><p> &gt; Jewelled blenny </p>
+            <p> &gt; Mouse C3H/HeJ </p><p> &gt; Zebra mbuna </p>
+            <p> &gt; White-throated sparrow </p><p> &gt; Painted turtle </p>
+            <p> &gt; Zebrafish </p><p> &gt; Goldfish </p><p> &gt; Horse </p>
+            <p> &gt; Greater horseshoe bat </p><p> &gt; Eastern happy </p>
+            <p> &gt; Tropical clawed frog </p><p> &gt; Spoon-billed sandpiper </p>
+            <p> &gt; Angola colobus </p><p> &gt; Algerian mouse </p><p> &gt; Dog </p>
+            <p> &gt; Macaque </p><p> &gt; Squirrel </p><p> &gt; Mouse Lemur </p>
+            <p> &gt; Common wombat </p><p> &gt; Rabbit </p><p> &gt; Polar bear </p>
+            <p> &gt; Atlantic herring </p><p> &gt; Chicken </p><p> &gt; Fugu </p>
+            <p> &gt; Bicolor damselfish </p><p> &gt; Mouse NZO/HlLtJ </p>
+            <p> &gt; Reedfish </p><p> &gt; Chinese softshell turtle </p>
+            <p> &gt; Blunt-snouted clingfish </p><p> &gt; Caenorhabditis elegans </p>
+            <p> &gt; Coquerel's sifaka </p><p> &gt; Agassiz's desert tortoise </p>
+            <p> &gt; Guppy </p><p> &gt; Javanese ricefish </p>
+            <p> &gt; Makobe Island cichlid </p><p> &gt; Prairie vole </p>
+            <p> &gt; Gelada </p><p> &gt; Pinecone soldierfish </p>
+            <p> &gt; Arabian camel </p><p> &gt; Japanese medaka HSOK </p>
+            <p> &gt; Asiatic black bear </p><p> &gt; Bengalese finch </p>
+            <p> &gt; Hyrax </p><p> &gt; Turkey </p><p> &gt; Shrew </p>
+            <p> &gt; Golden snub-nosed monkey </p><p> &gt; Black snub-nosed monkey </p>
+            <p> &gt; Round goby </p><p> &gt; Asian bonytongue </p><p> &gt; Electric eel </p>
+            <p> &gt; American bison </p><p> &gt; Shortfin molly </p>
+            <p> &gt; Orange clownfish </p><p> &gt; Komodo dragon </p>
+            <p> &gt; Blind barbel </p><p> &gt; Ugandan red Colobus </p>
+            <p> &gt; Olive baboon </p><p> &gt; Lesser Egyptian jerboa </p><p> &gt; Cat </p>
+            <p> &gt; Pink-footed goose </p><p> &gt; Capuchin </p>
+            <p> &gt; Australian saltwater crocodile </p><p> &gt; Naked mole-rat female </p>
+            <p> &gt; Mouse FVB/NJ </p><p> &gt; Abingdon island giant tortoise </p>
+            <p> &gt; Gibbon </p><p> &gt; Mouse A/J </p><p> &gt; Yellowtail amberjack </p>
+            <p> &gt; Bolivian squirrel monkey </p><p> &gt; Crab-eating macaque </p>
+            <p> &gt; Damara mole rat </p><p> &gt; Huchen </p>
+            <p> &gt; Rufous-capped babbler </p><p> &gt; Blue-crowned manakin </p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 4: Error
+
+            /Input: http://127.0.0.1:8080/listSpecias?limit=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Karyotype:
+
+        >Test 1: Mouse
+
+            /Input: http://127.0.0.1:8080/karyotype?species=mouse
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Karyotype of the selected specie</h1>
+            <hr>
+            <p>Total number of species in the data base is: 0</p>
+            <p>The chromosomes requested are:</p><p> &gt; 1 </p><p> &gt; 2 </p><p> &gt; 3 </p><p> &gt; 4 </p>
+            <p> &gt; 5 </p><p> &gt; 6 </p><p> &gt; 7 </p><p> &gt; 8 </p><p> &gt; 9 </p><p> &gt; 10 </p><p> &gt; 11 </p>
+            <p> &gt; 12 </p><p> &gt; 13 </p><p> &gt; 14 </p><p> &gt; 15 </p><p> &gt; 16 </p><p> &gt; 17 </p>
+            <p> &gt; 18 </p><p> &gt; 19 </p><p> &gt; X </p><p> &gt; Y </p><p> &gt; MT </p><a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: Wrong animal ('ysera')
+
+            /Input: http://127.0.0.1:8080/karyotype?species=ysera
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">400 Bad Request:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 3: Integer input (Error)
+
+            /Input: http://127.0.0.1:8080/karyotype?species=3
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">400 Bad Request:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 4: Pig
+
+            /Input: http://127.0.0.1:8080/karyotype?species=Pig
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+                <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Karyotype of the selected specie</h1>
+            <hr>
+            <p>Total number of species in the data base is: 0</p>
+            <p>The chromosomes requested are:</p><p> &gt; 1 </p><p> &gt; 2 </p><p> &gt; 3 </p>
+            <p> &gt; 4 </p><p> &gt; 5 </p><p> &gt; 6 </p><p> &gt; 7 </p><p> &gt; 8 </p><p> &gt; 9 </p>
+            <p> &gt; 10 </p><p> &gt; 11 </p><p> &gt; 12 </p><p> &gt; 13 </p><p> &gt; 14 </p>
+            <p> &gt; 15 </p><p> &gt; 16 </p><p> &gt; 17 </p><p> &gt; 18 </p><p> &gt; X </p>
+            <p> &gt; Y </p><p> &gt; MT </p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 5: Error
+
+            /Input: http://127.0.0.1:8080/kangaroo
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Chromosome Length
+
+        >Test 1: Mouse; Chromosome 18
+
+            /Input: http://localhost:8080/chromosomeLength?specie=mouse&chromo=18
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome's Length</h1><hr>
+            <p>The length of the selected chromosome is:</p>
+            <p> 90702639</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: Pig; Chromosome 3
+
+            /Input: http://localhost:8080/chromosomeLength?species=Pig&chromo=3
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome's Length</h1><hr>
+            <p>The length of the selected chromosome is:</p>
+            <p> 132848913</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 3: Empty Input # -- Repetition of the Link used to return to the main page
+
+            /Input: http://localhost:8080/chromosomeLength?species=&chromo=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            <a href="/">Main page</a>
+
+            </body></html>
+
+        >Test 3.2: Empty Input (Fixed by making the '<a href="/">Main page</a>' element independent)
+
+            /Input: http://localhost:8080/chromosomeLength?species=&chromo=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 4: Check for structure changes due to previous modifications
+
+            /Input: http://localhost:8080/chromosomeLength?specie=mouse&chromo=18
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome's Length</h1><hr>
+            <p>The length of the selected chromosome is:</p>
+            <p> 90702639</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 5: Invalid Input
+
+            /Input: http://localhost:8080/chromosomeLength?species=mouse&chromo=24987123
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">Error:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 6: Error
+
+            /Input: http://localhost:8080/koala
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
