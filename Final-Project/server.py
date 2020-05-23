@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import termcolor
 from pathlib import Path
+from Seq1 import Seq
 import json
 
 
@@ -25,7 +26,6 @@ SEQ_GET = [
 # -- It means that our class inherits all his methods and properties
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
-    global contents
 
     def do_GET(self):
         """This method is called whenever the client invokes the GET method
@@ -50,14 +50,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         task = arguments[0]
 
         # -- Def. the contents and the status:
-        contents = Path('Error.html').read_text()
+        content = Path('Error.html').read_text()
         status = 200
 
         try:
 
             # -- Main page (index):
             if task == "/":
-                contents = Path('index.html').read_text()
+                content = Path('index.html').read_text()
 
             # _______ Basic Lv. _______
 
@@ -111,7 +111,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                         # -- We add every specie to all_s_list:
                                         all_s_list.append(species)
 
-                    contents = f"""
+                    content = f"""
                                 <!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
@@ -130,12 +130,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                         # -- Is a limit value is entered:
                         if lim_v != "":
-                            contents += f"""<p>Number of species selected : {lim_v} </p>"""
+                            content += f"""<p>Number of species selected : {lim_v} </p>"""
 
                             # -- Invalid limit values:
                             if int(lim_v) > len(all_s_list) or int(lim_v) == 0 or int(
                                     lim_v) < 0:
-                                contents = f"""<!DOCTYPE html>
+                                content = f"""<!DOCTYPE html>
                                                     <html lang = "en">
                                                     <head>
                                                         <meta charset = "utf-8" >
@@ -148,29 +148,29 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             else:
                                 # -- We separate the first n species (n = lim ordered by the user)
                                 limit_species_list = all_s_list[:(int(lim_v))]
-                                contents += f"""<p>The species are: </p>"""
+                                content += f"""<p>The species are: </p>"""
 
                                 # -- Individual print of the species:
                                 for species in limit_species_list:
-                                    contents += f"""<p> > {species} </p>"""
+                                    content += f"""<p> > {species} </p>"""
 
-                            contents += f"""<a href="/">Main page</a></body></html>"""
+                            content += f"""<a href="/">Main page</a></body></html>"""
 
                         # -- If no limit input, all the species will be displayed:
                         else:
-                            contents += f"""<p>No integer introduced. All species are going to be displayed. </p>
+                            content += f"""<p>No integer introduced. All species are going to be displayed. </p>
                                         <p>The species are: </p>"""
 
                             # The species are printed one by one:
                             for species in all_s_list:
-                                contents += f"""<p> > {species} </p>"""
-                            contents += f"""<a href="/">Main page</a></body></html>"""
+                                content += f"""<p> > {species} </p>"""
+                            content += f"""<a href="/">Main page</a></body></html>"""
 
                     else:
-                        contents = Path('Error.html').read_text()
+                        content = Path('Error.html').read_text()
 
                 except ValueError:
-                    contents = f"""<!DOCTYPE html>
+                    content = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
@@ -182,17 +182,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             # -- Return information about the karyotype of a specie: The name (usually a number) of all the chromosomes
             elif "/karyotype" in task:
-
-                # -- We create a html 'template'
-                contents = f"""
-                    <!DOCTYPE html>
-                    <html lang = "en">
-                    <head>
-                    <meta charset = "utf-8" >
-                        <title>List of species</title >
-                    </head >
-                    <body>
-                    """
 
                 # -- We extract the specie selected:
                 selection = arguments[1]
@@ -233,7 +222,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     all_s_list = []
 
                     # -- We create a html 'template'
-                    contents = f"""
+                    content = f"""
                                                     <!DOCTYPE html>
                                                     <html lang = "en">
                                                     <head>
@@ -241,7 +230,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                                         <title>List of species</title >
                                                     </head >
                                                     <body>
-                                                    <p>Total number of species in the data base is: {len(all_s_list)}</p>
+                                                    <p>Total number of species in the
+                                                    data base is: {len(all_s_list)}</p>
                                                     """
 
                     # -- We fix the karyotype from the dictionary. 'Karyotype is a key of the dict.
@@ -250,7 +240,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                             # -- If the specie selected doesn't have a karyotype info in the data base:
                             if str(v) == "[]":
-                                contents = f"""
+                                content = f"""
                                 <!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
@@ -262,17 +252,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 """
                             else:
                                 if sel_a == 'species':
-                                    contents += f"""<p>The chromosomes requested are:</p>"""
+                                    content += f"""<p>The chromosomes requested are:</p>"""
 
                                     # -- 'v' is the list of values (karyotype). Individual print
                                     for i in v:
-                                        contents += f"""<p> > {i} </p>"""
+                                        content += f"""<p> > {i} </p>"""
                                 else:
-                                    contents = Path("error.html").read_text()
+                                    content = Path("error.html").read_text()
 
                         # -- If the selected species doesn't exist or is not present in esembl:
                         elif f"{response.status} {response.reason}" == "400 Bad Request":
-                            contents = f"""
+                            content = f"""
                             <!DOCTYPE html>
                             <html lang = "en">
                             <head>
@@ -285,12 +275,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                         # -- If no input is entered:
                         elif f"{response.status} {response.reason}" == "404 Not Found":
-                            contents = Path("error.html").read_text()
+                            content = Path("error.html").read_text()
 
-                    contents += f"""<a href="/">Main page</a></body></html>"""
+                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
-                    contents = f"""<!DOCTYPE html>
+                    content = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
@@ -343,7 +333,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     all_s_dict = json.loads(body)
 
                     # -- We create a html 'template'
-                    contents = f"""
+                    content = f"""
                                                     <!DOCTYPE html>
                                                     <html lang = "en">
                                                     <head>
@@ -357,11 +347,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     for k, v in all_s_dict.items():
                         if k == "length":
                             len_ch = str(v)
-                            contents += f"""<p>The length of the selected chromosome is: {len_ch}</p>"""
+                            content += f"""<p>The length of the selected chromosome is: {len_ch}</p>"""
 
                         # -- If the selected species doesn't exist or is not present in esembl:
                         elif f"{response.status} {response.reason}" == "400 Bad Request":
-                            contents = f"""
+                            content = f"""
                             <!DOCTYPE html>
                             <html lang = "en">
                             <head>
@@ -374,12 +364,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                         # -- If no input is entered:
                         elif f"{response.status} {response.reason}" == "404 Not Found":
-                            contents = Path("error.html").read_text()
+                            content = Path("error.html").read_text()
 
-                    contents += f"""<a href="/">Main page</a></body></html>"""
+                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
-                    contents = f"""<!DOCTYPE html>
+                    content = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
@@ -456,7 +446,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     seq = all_s_dict_2["seq"]
 
                     # -- We create a html 'template'
-                    contents = f"""
+                    content = f"""
                                                     <!DOCTYPE html>
                                                     <html lang = "en">
                                                     <head>
@@ -468,11 +458,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK" \
                             or f"{response_2.status} {response_2.reason}" == "200 OK":
-                        contents += f"""<p>The seq. of {st_id} is: {seq}</p>"""
+                        content += f"""<p>The seq. of {st_id} is: {seq}</p>"""
 
                     # -- If the selected species doesn't exist or is not present in esembl:
                     elif f"{response.status} {response.reason}" == "400 Bad Request":
-                        contents = f"""
+                        content = f"""
                         <!DOCTYPE html>
                         <html lang = "en">
                         <head>
@@ -485,12 +475,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- If no input is entered:
                     elif f"{response.status} {response.reason}" == "404 Not Found":
-                        contents = Path("error.html").read_text()
+                        content = Path("error.html").read_text()
 
-                    contents += f"""<a href="/">Main page</a></body></html>"""
+                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
-                    contents = f"""<!DOCTYPE html>
+                    content = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
@@ -568,32 +558,32 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     finish = all_s_dict_2["end"]
                     length = int(finish) - int(start)
 
-                    id = all_s_dict_2["id"]
+                    id_value = all_s_dict_2["id"]
                     chromose = all_s_dict_2["seq_region_name"]
 
                     # -- We create a html 'template'
-                    contents = f"""
-                                                    <!DOCTYPE html>
-                                                    <html lang = "en">
-                                                    <head>
-                                                    <meta charset = "utf-8" >
-                                                        <title>List of species</title >
-                                                    </head >
-                                                    <body>
-                                                    """
+                    content = f"""
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body>
+                            """
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK" \
                             or f"{response_2.status} {response_2.reason}" == "200 OK":
-                        contents += f"""<h1>{sel_n}</h1>
+                        content += f"""<h1>{sel_n}</h1>
                                     <p>Start Value: {start}</p>
                                     <p>End Value: {finish}</p>
                                     <p>Length Value: {length}</p>
-                                    <p>Stable Id: {id}</p>
+                                    <p>Stable Id: {id_value}</p>
                                     <p>Chromose: {chromose}</p>"""
 
                     # -- If the selected species doesn't exist or is not present in esembl:
                     elif f"{response.status} {response.reason}" == "400 Bad Request":
-                        contents = f"""
+                        content = f"""
                         <!DOCTYPE html>
                         <html lang = "en">
                         <head>
@@ -606,12 +596,226 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     # -- If no input is entered:
                     elif f"{response.status} {response.reason}" == "404 Not Found":
-                        contents = Path("error.html").read_text()
+                        content = Path("error.html").read_text()
 
-                    contents += f"""<a href="/">Main page</a></body></html>"""
+                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
-                    contents = f"""<!DOCTYPE html>
+                    content = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>error</title >
+                                </head>
+                                <body>
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
+
+            # -- Performs some calculations on the given human gene and returns the total length
+            # and the percentage of all its bases
+            elif "/geneCalc" in task:
+
+                # -- We extract the specie selected:
+                selection = arguments[1]
+
+                # --Obtain name of the species
+                sel_n = selection.split("=")[1]
+                print(sel_n)
+                # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
+                end_p_1 = f"/xrefs/symbol/homo_sapiens/{sel_n}"
+
+                try:
+
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p_1 + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body_1 = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body_1)
+
+                    # -- First element contains the stable ID:
+                    dct_st = all_s_dict[0]
+
+                    # -- Extraction of the stable ID:
+                    st_id = dct_st["id"]
+
+                    # -- 2) This endpoint lists:  -Info of that gene/seq (st_id)
+                    end_p_2 = f"/sequence/id/{st_id}"
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p_2 + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response_2 = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response_2.status} {response_2.reason}\n")
+
+                    # -- Read the response:
+                    body_2 = response_2.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict_2 = json.loads(body_2)
+
+                    # -- We create a html 'template'
+                    content = f"""
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body>
+                            """
+
+                    # -- If the input is valid:
+                    if f"{response.status} {response.reason}" == "200 OK" \
+                            or f"{response_2.status} {response_2.reason}" == "200 OK":
+                        # -- Extraction of the seq.
+                        seq = all_s_dict_2["seq"]
+                        # -- We make use of the Seq class defined in previous practices to perfrom operations
+                        s = Seq(seq)
+                        # -- Length
+                        length = s.len()
+                        base_l = ["A", "C", "T", "G"]
+                        base_r = ""
+                        count = s.count()
+                        print(count)
+                        for i in base_l:
+                            per = round((count[i] / length) * 100, 2)
+                            base_r += f"""{base_l[i]}: {count[i]} {per}%"""
+                        content = content + f"""<h1>{sel_n}:</h1>
+                                    <p>Tot. length of the gene: {length}</p>""" + base_r
+
+
+                    # -- If the selected species doesn't exist or is not present in esembl:
+                    elif f"{response.status} {response.reason}" == "400 Bad Request" \
+                            or f"{response_2.status} {response_2.reason}" == "400 Bad Request":
+                        content = f"""
+                        <!DOCTYPE html>
+                        <html lang = "en">
+                        <head>
+                        <meta charset = "utf-8" >
+                            <title>Error</title >
+                        </head >
+                        <body>
+                        <p> The resource req. is not available or doesn't exist</p>
+                        """
+
+                    # -- If no input is entered:
+                    elif f"{response.status} {response.reason}" == "404 Not Found" \
+                            or f"{response_2.status} {response_2.reason}" == "404 Not Found":
+                        content = Path("error.html").read_text()
+
+                    content += f"""<a href="/">Main page</a></body></html>"""
+
+                except ValueError:
+                    content = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>error</title >
+                                </head>
+                                <body>
+                                <p>Error: You entered an invalid value. Introduce an integer value for limit</p>
+                                <a href="/">Main page</a></body></html>"""
+
+            # -- Return the names of the genes located in the chromosome "chromo" from the start to end positions
+            elif "/geneList" in task:
+
+                # -- We extract the specie selected:
+                selection = arguments[1]
+
+                chromo = selection.split("&")[0]
+                start = selection.split("&")[1]
+                finish = selection.split("&")[2]
+                # --Obtain name of the species
+
+                sel_c = chromo.split("=")[1]
+                sel_s = start.split("=")[1]
+                sel_f = finish.split("=")[1]
+
+                # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
+                end_p = f"/overlap/region/human/{sel_c}:{sel_s}-{sel_f}"
+
+                try:
+                    # Connect with the server
+                    connect = http.client.HTTPConnection(server)
+
+                    # -- Send the request message, using the GET method. The main page is requested
+                    try:
+                        connect.request("GET", end_p + params)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
+
+                    # -- Read the response
+                    response = connect.getresponse()
+
+                    # -- Print the status line
+                    print(f"Response from esembl received: {response.status} {response.reason}\n")
+
+                    # -- Read the response:
+                    body_1 = response.read().decode("utf-8")
+
+                    # -- We convert the body (str > dict):
+                    all_s_dict = json.loads(body_1)
+
+                    # -- We create a html 'template'
+                    content = f"""
+                            <!DOCTYPE html>
+                            <html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                                <title>List of species</title >
+                            </head >
+                            <body>
+                            """
+                    # -- If the input is valid:
+                    if f"{response.status} {response.reason}" == "200 OK":
+                        for i in all_s_dict:
+                            content += f"""<p> > {i["external_name"]}</p>"""
+
+                    # -- If the selected species doesn't exist or is not present in esembl:
+                    elif f"{response.status} {response.reason}" == "400 Bad Request":
+                        content = f"""
+                        <!DOCTYPE html>
+                        <html lang = "en">
+                        <head>
+                        <meta charset = "utf-8" >
+                            <title>Error</title >
+                        </head >
+                        <body>
+                        <p> The resource req. is not available or doesn't exist</p>
+                        """
+
+                    # -- If no input is entered:
+                    elif f"{response.status} {response.reason}" == "404 Not Found":
+                        content = Path("error.html").read_text()
+
+                    content += f"""<a href="/">Main page</a></body></html>"""
+
+                except ValueError:
+                    content = f"""<!DOCTYPE html>
                                 <html lang = "en">
                                 <head>
                                  <meta charset = "utf-8" >
@@ -622,21 +826,21 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <a href="/">Main page</a></body></html>"""
 
         except (KeyError, ValueError, IndexError, TypeError):
-            contents = Path('error.html').read_text()
-            contents += f"""<p><a href="/">Main page </a></body></html>"""
+            content = Path('error.html').read_text()
+            content += f"""<p><a href="/">Main page </a></body></html>"""
 
         # -- Gen. the resp. message
         self.send_response(status)  # -- Status line: OK!
 
         # -- Def. the content-type header:
         self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', len(str.encode(contents)))
+        self.send_header('Content-Length', len(str.encode(content)))
 
         # -- The header is finished
         self.end_headers()
 
         # -- Send the response
-        self.wfile.write(str.encode(contents))
+        self.wfile.write(str.encode(content))
 
         return
 
