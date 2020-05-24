@@ -1,0 +1,481 @@
+Basic Lv. Report:
+___________________________________________________________________________________________
+
+    -List of Species:
+
+        >Test 1: Limit = 10
+
+            /Input: http://localhost:8080/listSpecies?limit=10
+
+            /Output: <html lang="en"><head>
+                                <meta charset="utf-8">
+                                    <title>List of species</title>
+                                </head>
+                                <body style="background-color:lightblue;">
+                                <h1>List of Species</h1>
+                                <hr>
+                                <p>Total number of species in the data base is: 286</p>
+                                <p>Number of species selected : 10 </p><hr>
+                                <b>The species are: </b>
+                                <p> &gt; Pig - Rongchang </p><p> &gt; Pika </p><p> &gt; African ostrich </p>
+                                <p> &gt; Nile tilapia </p><p> &gt; Channel catfish </p>
+                                <p> &gt; West African mud turtle </p><p> &gt; Channel bull blenny </p>
+                                <p> &gt; Sooty mangabey </p><p> &gt; Dolphin </p><p> &gt; Naked mole-rat male </p>
+                                <a href="/">Main page</a></body></html>
+
+        >Test 2: Limit = asdf
+
+            /Input: http://127.0.0.1:8080/listSpecies?limit=asdf
+
+            /Output: <html lang="en"><head>
+                                 <meta charset="utf-8">
+                                 <title>error</title>
+                                </head>
+                                <body>
+                                <h1><span style="color:red;">Error:</span></h1>
+                                <p><span style="color:red;">You entered an invalid value.
+                                Introduce an integer value for limit</span></p>
+                                <a href="/">Main page</a></body></html>
+
+        >Test 3: Error
+
+            /Input: http://127.0.0.1:8080/listSpeci'a's?limit=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Karyotype:
+
+        >Test 1: Mouse
+
+            /Input: http://127.0.0.1:8080/karyotype?species=mouse
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Karyotype of the selected specie</h1>
+            <hr>
+            <p>Total number of species in the data base is: 0</p>
+            <p>The chromosomes requested are:</p><p> &gt; 1 </p><p> &gt; 2 </p><p> &gt; 3 </p><p> &gt; 4 </p>
+            <p> &gt; 5 </p><p> &gt; 6 </p><p> &gt; 7 </p><p> &gt; 8 </p><p> &gt; 9 </p><p> &gt; 10 </p><p> &gt; 11 </p>
+            <p> &gt; 12 </p><p> &gt; 13 </p><p> &gt; 14 </p><p> &gt; 15 </p><p> &gt; 16 </p><p> &gt; 17 </p>
+            <p> &gt; 18 </p><p> &gt; 19 </p><p> &gt; X </p><p> &gt; Y </p><p> &gt; MT </p><a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: Wrong animal ('malygos')
+
+            /Input: http://127.0.0.1:8080/karyotype?species=malygos
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">400 Bad Request:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 3: Integer input (Error)
+
+            /Input: http://127.0.0.1:8080/karyotype?species=12
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">400 Bad Request:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 4: Dolphin
+
+            /Input: http://localhost:8080/karyotype?species=dolphin
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">Empty karyotype</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a
+            ></body></html>
+
+        >Test 5: Error
+
+            /Input: http://localhost:8080/karyotype?species=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Chromosome Length
+
+        >Test 1: Mouse; Chromosome 18
+
+            /Input: http://localhost:8080/chromosomeLength?specie=mouse&chromo=18
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome's Length</h1><hr>
+            <p>The length of the selected chromosome is:</p>
+            <p> 90702639</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: Pig; Chromosome 3
+
+            /Input: http://localhost:8080/chromosomeLength?species=Pig&chromo=3
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome's Length</h1><hr>
+            <p>The length of the selected chromosome is:</p>
+            <p> 132848913</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 3: Empty Input
+
+            /Input: http://localhost:8080/chromosomeLength?species=&chromo=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 5: Invalid Input
+
+            /Input: http://localhost:8080/chromosomeLength?species=mouse&chromo=24987123
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">Error:</span></h1>
+            <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 6: Error
+
+            /Input: http://localhost:8080/harambe
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+Medium Lv. Report
+___________________________________________________________________________________________
+
+    -Seq. searcher for human genes (geneSeq)
+
+        >Test 1: FRAT1
+
+            /Input: http://localhost:8080/geneSeq?gene=FRAT1
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+                <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Gene Sequencing</h1><hr>
+            <p>The seq. of ENSG00000165879 is:</p>
+            <p>CGGCTCCCGCGGCTGCAGGCGCGCGGCTA    ...
+            ...     CACTTGAAATCTC</p>
+            <a href="/">Main page</a></body>
+            </html>
+
+        >Test 2: U5
+
+            /Input: http://localhost:8080/geneSeq?gene=U5
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 3: Empty
+
+            /Input: http://127.0.0.1:8080/geneSeq?gene=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 4: Invalid input
+
+            /Input: http://127.0.0.1:8080/geneSeq?gene=asdf
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Obtain information of a human gene (geneInfo)
+
+        >Test 1: FRAT1
+
+            /Input: http://127.0.0.1:8080/geneInfo?gene=FRAT1
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>FRAT1</h1><hr>
+            <p>Start Value: 97319271</p>
+            <p>End Value: 97321915</p>
+            <p>Length Value: 2644</p>
+            <p>Stable Id: ENSG00000165879</p>
+            <p>Chromose: 10</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: U5
+
+            /Input: http://127.0.0.1:8080/geneInfo?gene=U5
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 3: Empty
+
+            /Input: http://127.0.0.1:8080/geneInfo?gene=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 4: Invalid Input
+
+            /Input: http://127.0.0.1:8080/geneInfo?gene=asdf
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Obtain the length and the base percentage of a human gene (geneCalc)
+
+        >Test 1: FRAT1
+
+            /Input: http://127.0.0.1:8080/geneCalc?gene=FRAT1
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>FRAT1:</h1><hr>
+            <p>Tot. length of the gene: 2645</p><p>A: 477 (18.03%)</p>
+            <p>C: 799 (30.21%)</p>
+            <p>T: 520 (19.66%)</p>
+            <p>G: 849 (32.1%)</p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 2: U5
+
+            /Input: http://127.0.0.1:8080/geneCalc?gene=U5
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 3: Empty Input
+
+            /Input: http://127.0.0.1:8080/geneCalc?gene=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+        >Test 4: Invalid Input
+
+            /Input: http://127.0.0.1:8080/geneCalc?gene=asdf
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="UTF-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">ERROR</span></h1>
+            <p><span style="color:red;">Resource not available</span></p>
+            <a href="/">Main page</a>
+            </body></html>
+
+
+
+
+
+    -Obtain the gene's names located in a selected chromosome (geneList)
+
+        >Test 1: Chromosome 1; 1-30000
+
+            /Input: http://127.0.0.1:8080/geneList?gene=1&start=1&end=30000
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>List of species</title>
+            </head>
+            <body style="background-color:lightblue;">
+            <h1>Chromosome 1:</h1>
+            <h2>1-30000</h2>
+            <hr>
+            <p> &gt; DDX11L1</p><p> &gt; WASH7P</p><p> &gt; MIR6859-1</p><p> &gt; MIR1302-2HG</p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 2: Incomplete input
+
+            /Input: http://127.0.0.1:8080/geneList?gene=5&start=&end=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">Error:</span></h1>
+            <p> The resource req. is not available or doesn't exist</p>
+            <a href="/">Main page</a></body></html>
+
+        >Test 3: Empty Input
+
+            /Input: http://127.0.0.1:8080/geneList?gene=&start=&end=
+
+            /Output:
+            <html lang="en"><head>
+            <meta charset="utf-8">
+            <title>Error</title>
+            </head>
+            <body>
+            <h1><span style="color:red;">Error:</span></h1>
+            <p> The resource req. is not available or doesn't exist</p>
+            <a href="/">Main page</a></body></html>
+
+___________________________________________________________________________________________

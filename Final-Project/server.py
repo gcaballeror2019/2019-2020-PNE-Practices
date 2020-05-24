@@ -240,6 +240,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <p><span style="color:red;">The resource req. is not available or does not exist
                                 </span></p>
                                 """
+                                content += f"""<a href="/">Main page</a></body></html>"""
 
                             else:
                                 if sel_a == 'species':
@@ -247,6 +248,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                     # -- 'v' is the list of values (karyotype). Individual print
                                     for i in v:
                                         content += f"""<p> > {i} </p>"""
+                                    content += f"""<a href="/">Main page</a></body></html>"""
                                 else:
                                     content = Path("error.html").read_text()
 
@@ -263,12 +265,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <h1><span style="color:red;">400 Bad Request:</span></h1>
                             <p><span style="color:red;">The resource req. is not available or does not exist</span></p>
                             """
-
+                            content += f"""<a href="/">Main page</a></body></html>"""
                         # -- If no input is entered:
                         elif f"{response.status} {response.reason}" == "404 Not Found":
                             content = Path("error.html").read_text()
 
-                    content += f"""<a href="/">Main page</a></body></html>"""
+
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>
@@ -370,7 +372,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <a href="/">Main page</a></body></html>"""
 
 
-            # _______ Medium Lv. _______
+            # ______________________________________ Medium Lv. ______________________________________
             elif "/geneSeq" in task:
 
                 # -- We extract the specie selected:
@@ -448,12 +450,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             """
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK" \
-                            or f"{response_2.status} {response_2.reason}" == "200 OK":
+                            and f"{response_2.status} {response_2.reason}" == "200 OK":
                         content += f"""<p>The seq. of {st_id} is:</p>
                                     <p>{seq}</p>"""
-
+                        content += f"""<a href="/">Main page</a></body></html>"""
                     # -- If the selected species doesn't exist or is not present in esembl:
-                    elif f"{response.status} {response.reason}" == "400 Bad Request":
+                    elif f"{response.status} {response.reason}" == "400 Bad Request" \
+                            or f"{response_2.status} {response_2.reason}" == "400 Bad Request":
                         content = f"""
                         <!DOCTYPE html>
                         <html lang = "en">
@@ -463,14 +466,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </head >
                         <body>
                         <h1><span style="color:red;">Error:</span></h1>
-                        <p> The resource req. is not available or doesn't exist</p>
+                        <p> The resource req. is not available or does not exist</p>
                         """
+                        content += f"""<a href="/">Main page</a></body></html>"""
 
                     # -- If no input is entered:
-                    elif f"{response.status} {response.reason}" == "404 Not Found":
+                    elif f"{response.status} {response.reason}" == "404 Not Found" \
+                            or f"{response_2.status} {response_2.reason}" == "404 Not Found":
                         content = Path("error.html").read_text()
-
-                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>
@@ -566,17 +569,18 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <body style="background-color:lightblue;">
                             """
                     # -- If the input is valid:
-                    if f"{response.status} {response.reason}" == "200 OK" \
-                            or f"{response_2.status} {response_2.reason}" == "200 OK":
+                    if f"{response_2.status} {response_2.reason}" == "200 OK":
                         content += f"""<h1>{sel_n}</h1><hr>
                                     <p>Start Value: {start}</p>
                                     <p>End Value: {finish}</p>
                                     <p>Length Value: {length}</p>
                                     <p>Stable Id: {id_value}</p>
-                                    <p>Chromose: {chromose}</p>"""
+                                    <p>Chromose: {chromose}</p>
+                                    <a href="/">Main page</a>
+                                    </body></html>"""
 
                     # -- If the selected species doesn't exist or is not present in esembl:
-                    elif f"{response.status} {response.reason}" == "400 Bad Request":
+                    elif f"{response_2.status} {response_2.reason}" == "400 Bad Request":
                         content = f"""
                         <!DOCTYPE html>
                         <html lang = "en">
@@ -586,14 +590,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </head >
                         <body>
                         <h1><span style="color:red;">Error:</span></h1>
-                        <p> The resource req. is not available or doesn't exist</p>
-                        """
+                        <p> The resource req. is not available or does not exist</p>
+                        <a href="/">Main page</a>
+                        </body></html>"""
 
                     # -- If no input is entered:
-                    elif f"{response.status} {response.reason}" == "404 Not Found":
+                    elif f"{response_2.status} {response_2.reason}" == "404 Not Found":
                         content = Path("error.html").read_text()
-
-                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>
@@ -614,7 +617,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 selection = arguments[1]
                 # --Obtain name of the species
                 sel_n = selection.split("=")[1]
-                print(sel_n)
                 # -- 1) This endpoint lists:  -Stable ID of the gene (human) + info
                 end_p_1 = f"/xrefs/symbol/homo_sapiens/{sel_n}"
 
@@ -702,6 +704,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 <p>{base_l[3]}: {b_g} ({round((b_g / length) * 100, 2)}%)</p>"""
                         content = content + f"""<h1>{sel_n}:</h1><hr>
                         <p>Tot. length of the gene: {length}</p>""" + base_r
+                        content += f"""<a href="/">Main page</a></body></html>"""
 
 
                     # -- If the selected species doesn't exist or is not present in esembl:
@@ -718,13 +721,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         <h1><span style="color:red;">Error:</span></h1>
                         <p> The resource req. is not available or doesn't exist</p>
                         """
+                        content += f"""<a href="/">Main page</a></body></html>"""
 
                     # -- If no input is entered:
                     elif f"{response.status} {response.reason}" == "404 Not Found" \
                             or f"{response_2.status} {response_2.reason}" == "404 Not Found":
                         content = Path("error.html").read_text()
-
-                    content += f"""<a href="/">Main page</a></body></html>"""
 
                 except ValueError:
                     content = f"""<!DOCTYPE html>
@@ -786,7 +788,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <meta charset = "utf-8" >
                                 <title>List of species</title >
                             </head >
-                            <body>
+                            <body style="background-color:lightblue;">
+                            <h1>Chromosome {sel_c}:</h1>
+                            <h2>{sel_s}-{sel_f}</h2>
+                            <hr>
                             """
                     # -- If the input is valid:
                     if f"{response.status} {response.reason}" == "200 OK":
@@ -827,7 +832,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         except (KeyError, ValueError, IndexError, TypeError):
             content = Path('error.html').read_text()
-            content += f"""<p><a href="/">Main page </a></body></html>"""
 
         # -- Gen. the resp. message
         self.send_response(status)  # -- Status line: OK!
