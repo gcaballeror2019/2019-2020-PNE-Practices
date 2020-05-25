@@ -1,5 +1,102 @@
 Basic Lv. Report:
 ____________________________
+    -Index:
+
+        /Input: http://127.0.0.1:8080/
+
+        /Output:
+        <html lang="en"><head>
+        <meta charset="UTF-8">
+        <title>Main</title>
+        </head>
+        <body style="background-color:lightgrey;">
+        <h1>Browsing Human and Vertebrates genome</h1>
+        <b><font size="+2">Basic Lv. Services</font></b>
+
+        <hr>
+        <form action="listSpecies" method="get">
+        1)List of species in the database
+        <br>
+        Limit:
+        <input type="text" name="limit">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+
+        <br><br>
+        <form action="karyotype" method="get">
+        2)Info. about the karyotype (Some might not be available)
+        <br>
+        Select the desired specie:
+        <input type="text" name="species">
+        <br>
+        <input type="submit" value="Send">
+        <br>
+        </form>
+
+        <br><br>
+        <form action="chromosomeLength" method="get">
+        3)Chromosome Length
+        <br>
+        Select the specie:
+        <input type="text" name="species">
+        <br>
+        Select the chromosome:
+        <input type="text" name="chromo">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+        <br><br>
+        <b><font size="+2">Medium Lv. Services</font></b>
+        <hr>
+        <form action="geneSeq" method="get">
+        1)Seq. searcher of human genes
+        <br>
+        Gene name:
+        <input type="text" name="gene">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+
+        <br><br>
+        <form action="geneInfo" method="get">
+        2)Obtain information of a human gene
+        <br>
+        Gene name:
+        <input type="text" name="gene">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+
+        <br><br>
+        <form action="geneCalc" method="get">
+        3)Obtain the length and the base percentage of a human gene
+        <br>
+        Gene name:
+        <input type="text" name="gene">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+
+        <br><br>
+        <form action="geneList" method="get">
+        4)Obtain the gene's names located in a selected chromosome
+        <br>
+        Chromosome:
+        <input type="text" name="gene">
+        <br>
+        Start:
+        <input type="text" name="start">
+        <br>
+        End:
+        <input type="text" name="end">
+        <br>
+        <input type="submit" value="Send">
+        </form>
+        <br><br>
+        <hr>
+
+        </body></html>
 
     -List of Species:
 
